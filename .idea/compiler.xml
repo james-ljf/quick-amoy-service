@@ -6,7 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="game-card-shop" />
+        <module name="user-web" />
+        <module name="user-api" />
       </profile>
     </annotationProcessing>
   </component>
