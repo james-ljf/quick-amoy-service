@@ -6,8 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="user-web" />
+        <module name="order-web" />
         <module name="user-api" />
+        <module name="goods-web" />
+        <module name="rule-api" />
+        <module name="rule-web" />
+        <module name="order-api" />
+        <module name="user-web" />
+        <module name="goods-api" />
       </profile>
     </annotationProcessing>
   </component>

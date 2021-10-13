@@ -10,6 +10,12 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>user-service</module>
+        <module>goods-service</module>
+        <module>rule-service</module>
+        <module>order-service</module>
+        <module>evaluation-service</module>
+        <module>admin-service</module>
+        <module>common-service</module>
     </modules>
 
     <name>game-card-shop</name>
