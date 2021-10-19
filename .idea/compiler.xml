@@ -16,10 +16,13 @@
         <module name="goods-api" />
         <module name="user-api" />
         <module name="goods-web" />
-        <module name="evaluation-web" />
-        <module name="evaluation-api" />
         <module name="user-web" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="evaluation-api" target="8" />
+      <module name="evaluation-service" target="1.8" />
+      <module name="evaluation-web" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
