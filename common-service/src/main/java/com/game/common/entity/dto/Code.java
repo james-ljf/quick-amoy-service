@@ -1,11 +1,14 @@
 package com.game.common.entity.dto;
 
+import com.game.common.annotation.Description;
+
 import java.io.Serializable;
 
 /**
  * 自定义业务状态接口
  * @author dz0400449
  */
+@Description(value = "自定义业务状态接口")
 public interface Code extends Serializable {
 
     /**
