@@ -15,8 +15,6 @@ O
 order-service/order-web/pom.xml,d/5/d5f9b632350d32ea4bcf9a886cfcbef684d6a491
 O
 admin-service/admin-api/pom.xml,e/b/ebc9d67ed2f57e122b0eec8f390b095bd0c3e81e
-E
-admin-service/pom.xml,e/c/ec9e947d8731642d68e47bb858d36de041b210a0
 O
 admin-service/admin-web/pom.xml,b/d/bda1151d8d2b20bfcd07d5190a54deabffd7f36a
 E
