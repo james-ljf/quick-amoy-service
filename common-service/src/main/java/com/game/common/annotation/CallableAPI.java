@@ -13,9 +13,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CallableAPI {
 
-    // 接口描述
+    @Description(value = "接口描述")
     String desc() default "";
 
-    // 底层接口路径
+    @Description(value = "底层接口路径")
     String path() default "";
 }
