@@ -2,19 +2,23 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
+      <profile name="Annotation profile for game-card-shop" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.4.0.Final/mapstruct-processor-1.4.0.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.0.Final/mapstruct-1.4.0.Final.jar" />
+        </processorPath>
         <module name="order-web" />
-        <module name="common-service" />
         <module name="user-api" />
+        <module name="common-service" />
         <module name="goods-web" />
         <module name="rule-api" />
         <module name="admin-api" />
         <module name="admin-web" />
-        <module name="rule-web" />
         <module name="order-api" />
+        <module name="rule-web" />
         <module name="goods-api" />
         <module name="user-web" />
       </profile>
