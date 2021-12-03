@@ -1,10 +1,10 @@
 # game-point-card
 
 #### 介绍
-游戏点卡在线销售系统
+快拼电商搜索系统
 
 #### 软件架构
-软件架构说明
+基于springcloud+springboot+Lucene+mysql
 
 
 #### 安装教程
