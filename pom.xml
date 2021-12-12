@@ -40,6 +40,7 @@
         <aliyun-sdk-oss.version>3.1.0</aliyun-sdk-oss.version>
         <javafaker.version>1.0.2</javafaker.version>
         <mapstruct.version>1.4.0.Final</mapstruct.version>
+        <lucene.version>7.3.1</lucene.version>
     </properties>
 
     <dependencyManagement>
@@ -110,6 +111,11 @@
                 <artifactId>hutool-captcha</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -130,7 +136,7 @@
                 <version>${axis.version}</version>
             </dependency>
 
-            <!--aliyun-->
+            <!--aliyun oss-->
             <dependency>
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-core</artifactId>
@@ -142,24 +148,57 @@
                 <version>${aliyun-sdk-oss.version}</version>
             </dependency>
 
+            <!--造数据-->
             <dependency>
                 <groupId>com.github.javafaker</groupId>
                 <artifactId>javafaker</artifactId>
                 <version>${javafaker.version}</version>
             </dependency>
 
-            <!--实体映射工具类-->
+            <!--实体映射的转换工具-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
 
-            <!--maven版本控制-->
+            <!--lucene搜索引擎-->
             <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-core</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-common</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-highlighter</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-smartcn</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-suggest</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+
+            <!--ik分词器-->
+            <dependency>
+                <groupId>com.janeluo</groupId>
+                <artifactId>ikanalyzer</artifactId>
+                <version>2012_u6</version>
             </dependency>
 
         </dependencies>

@@ -27,7 +27,7 @@ public class JwtUtils {
     /**
      * 加密/解密 密钥
      */
-    private static final String JWT_SECRET = "game_card_shop";
+    private static final String JWT_SECRET = "kuaipin-service-v1";
 
     /**
      * 创建JWT

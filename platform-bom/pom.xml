@@ -9,12 +9,10 @@
         <version>1.0.0</version>
     </parent>
 
-
-<<<<<<< HEAD:platform-bom/pom.xml
     <artifactId>platform-bom</artifactId>
+    <name>platform-bom</name>
+    <description>公共模块</description>
 
-=======
->>>>>>> 356d4d499ecaccfc50a04c785117587add20a200:common-service/pom.xml
     <dependencies>
         <!--Lombok-->
         <dependency>
@@ -78,6 +76,10 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-captcha</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -113,6 +115,38 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--lucene搜索引擎-->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-smartcn</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-suggest</artifactId>
+        </dependency>
+
+        <!--ik分词器-->
+        <dependency>
+            <groupId>com.janeluo</groupId>
+            <artifactId>ikanalyzer</artifactId>
         </dependency>
 
     </dependencies>

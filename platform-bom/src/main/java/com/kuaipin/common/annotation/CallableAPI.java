@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 供调用的接口注解
+ * dubbo接口注释使用
  * @author lijf
  */
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})

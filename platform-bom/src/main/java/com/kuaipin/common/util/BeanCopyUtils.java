@@ -1,4 +1,4 @@
-package com.game.common.util;
+package com.kuaipin.common.util;
 
 import org.springframework.beans.BeanUtils;
 

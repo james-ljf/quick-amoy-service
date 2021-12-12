@@ -16,6 +16,6 @@ import java.lang.annotation.*;
 @Documented
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableDiscoveryClient
-@ComponentScan(basePackages = "com.game")
+@ComponentScan(basePackages = "com.kuaipin")
 public @interface StarterApplication {
 }
