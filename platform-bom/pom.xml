@@ -10,8 +10,11 @@
     </parent>
 
 
+<<<<<<< HEAD:platform-bom/pom.xml
     <artifactId>platform-bom</artifactId>
 
+=======
+>>>>>>> 356d4d499ecaccfc50a04c785117587add20a200:common-service/pom.xml
     <dependencies>
         <!--Lombok-->
         <dependency>
@@ -95,6 +98,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

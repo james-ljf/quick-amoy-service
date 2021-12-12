@@ -5,7 +5,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/user-web/pom.xml" />
+=======
+>>>>>>> 356d4d499ecaccfc50a04c785117587add20a200
       </list>
     </option>
   </component>
