@@ -9,9 +9,5 @@ K
 admin-web/admin-api/pom.xml,4\8\48822efa7f15c7606f393dfafae7734e5469c92a
 L
 rule-web/rule-server/pom.xml,3\1\31e6faf78d471ec6b763c8be14cccaed65590fb2
-D
-platform-bom/pom.xml,2\d\2dca65c69b19ad26f891a29276064c6c82dcf8bd
 @
 rule-web/pom.xml,a\6\a64128bbf0bd72b79a52d997b028772abe0cbe04
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec

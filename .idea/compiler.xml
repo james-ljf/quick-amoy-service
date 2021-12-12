@@ -18,7 +18,6 @@
         <module name="platform-bom" />
         <module name="admin-server" />
         <module name="search-web" />
-        <module name="user-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

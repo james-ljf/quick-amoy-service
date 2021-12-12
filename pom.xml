@@ -22,9 +22,9 @@
     <properties>
         <java.version>11</java.version>
         <game.point.card.version>1.0.0</game.point.card.version>
-        <springcloud.version>Hoxton.SR9</springcloud.version>
-        <springcloud.alibaba.version>2.2.6.RELEASE</springcloud.alibaba.version>
-        <springboot.version>2.3.2.RELEASE</springboot.version>
+        <springcloud.version>2020.0.1</springcloud.version>
+        <springcloud.alibaba.version>2021.1</springcloud.alibaba.version>
+        <springboot.version>2.4.2</springboot.version>
         <fastjson.version>1.2.67</fastjson.version>
         <lombok.version>1.16.18</lombok.version>
         <alipay.version>4.9.5.ALL</alipay.version>
