@@ -23,5 +23,12 @@ public class PageDTO implements Serializable {
     /** 页面记录大小 */
     private Integer pageSize;
 
-
+    @Override
+    public String toString() {
+        return "PageDTO{" +
+                "totalCount=" + totalCount +
+                ", pageNum=" + pageNum +
+                ", pageSize=" + pageSize +
+                '}';
+    }
 }

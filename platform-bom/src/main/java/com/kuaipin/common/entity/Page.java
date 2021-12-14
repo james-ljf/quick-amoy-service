@@ -2,6 +2,7 @@ package com.kuaipin.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class Page<T>{
 
     /** 对象列表 */
     private List<T> resultList;
+
+    public Page(){}
 
     public Page(Long totalCount, List<T> resultList){
         this.totalCount = totalCount;

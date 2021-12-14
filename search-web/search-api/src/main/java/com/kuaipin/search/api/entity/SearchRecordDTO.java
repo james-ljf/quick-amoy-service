@@ -38,4 +38,15 @@ public class SearchRecordDTO implements Serializable {
 
     private Date updateTime;
 
+    @Override
+    public String toString() {
+        return "SearchRecordDTO{" +
+                "searchId='" + searchId + '\'' +
+                ", searchKeyword='" + searchKeyword + '\'' +
+                ", searchExtend='" + searchExtend + '\'' +
+                ", uId='" + uId + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

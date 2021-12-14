@@ -4,6 +4,7 @@ import com.kuaipin.common.util.lucene.LuceneUtil;
 import org.apache.lucene.store.Directory;
 
 /**
+ * 单例Lucene内存目录对象
  * @Author: ljf
  * @DateTime: 2021/12/12 23:18
  */

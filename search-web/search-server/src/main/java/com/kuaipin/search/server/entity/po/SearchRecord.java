@@ -41,4 +41,16 @@ public class SearchRecord implements Serializable {
 
     private Date updateTime;
 
+    @Override
+    public String toString() {
+        return "SearchRecord{" +
+                "id=" + id +
+                ", searchId='" + searchId + '\'' +
+                ", searchKeyword='" + searchKeyword + '\'' +
+                ", searchExtend='" + searchExtend + '\'' +
+                ", uId='" + uId + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

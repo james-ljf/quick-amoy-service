@@ -29,4 +29,12 @@ public class SearchHistoryVO implements Serializable {
      */
     private String uId;
 
+    @Override
+    public String toString() {
+        return "SearchHistoryVO{" +
+                "searchId='" + searchId + '\'' +
+                ", searchKeyword='" + searchKeyword + '\'' +
+                ", uId='" + uId + '\'' +
+                '}';
+    }
 }
