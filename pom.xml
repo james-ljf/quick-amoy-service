@@ -24,19 +24,19 @@
         <springcloud.version>2020.0.1</springcloud.version>
         <springcloud.alibaba.version>2021.1</springcloud.alibaba.version>
         <springboot.version>2.4.2</springboot.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <fastjson.version>1.2.67</fastjson.version>
         <lombok.version>1.18.20</lombok.version>
         <alipay.version>4.9.5.ALL</alipay.version>
         <pagehelper.version>1.4.0</pagehelper.version>
         <mybatis.version>2.2.0</mybatis.version>
-        <mysql.version>5.1.47</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <hutool.version>5.7.14</hutool.version>
         <common.pool.version>2.10.0</common.pool.version>
         <druid.version>1.2.8</druid.version>
         <jjwt.version>0.2</jjwt.version>
         <pagehelper.version>1.2.13</pagehelper.version>
-        <axis.version>1.4</axis.version>
+        <axis.version>1.7.9</axis.version>
         <aliyun-java-sdk-core.version>4.3.3</aliyun-java-sdk-core.version>
         <aliyun-sdk-oss.version>3.1.0</aliyun-sdk-oss.version>
         <javafaker.version>1.0.2</javafaker.version>

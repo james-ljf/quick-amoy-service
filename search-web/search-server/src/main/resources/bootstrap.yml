@@ -1,19 +1,5 @@
-server:
-  port: 9010
 
-spring:
-  application:
-    name: search-web
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-wz98x93362094wv12vo.mysql.rds.aliyuncs.com:3307/kuaipin_service?useSSL=false&useUnicode=true&characterEncoding=UTF8&autoReconnect=true
-    username: lijiefeng
-    password: Ljf123456
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-        group: kuaipin-service
+
 #dubbo:
 #  scan:
 #    base-packages: com.kuaipin.search.server.service.dubbo
