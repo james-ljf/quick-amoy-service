@@ -6,12 +6,12 @@ import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.search.server.entity.po.SearchRecord;
 import com.kuaipin.search.server.entity.response.SearchHistoryVO;
-import com.kuaipin.search.server.repository.SearchRecordRepository;
+import com.kuaipin.search.server.repository.LuceneSearchRepository;
 import com.kuaipin.search.server.service.SearchRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,20 +23,20 @@ import java.util.List;
 @Service
 public class SearchRecordServiceImpl implements SearchRecordService {
 
-    @Resource
-    private SearchRecordRepository searchRecordRepository;
+    @Autowired
+    private LuceneSearchRepository luceneSearchRepository;
 
     @Override
     public Page<SearchRecord> findAllSearchRecord(PageDTO pageDTO) {
+        // 获取当前页和每页数量
         int pageNum = pageDTO.getPageNum();
         int pageSize = pageDTO.getPageSize();
         // 物理分页
         PageMethod.startPage(pageNum, pageSize);
         // 查询所有搜索记录并分页
-        Page<SearchRecord> result = searchRecordRepository.findAllSearchRecord();
+        Page<SearchRecord> result = luceneSearchRepository.findAllSearchRecord();
         log.info("[210.findAllSearchRecord page success] : req = {}, result = {}", pageDTO, result);
         if (result != null){
-            // 设置页码和每页数量
             result.setPageNum(pageNum);
             result.setPageSize(pageSize);
             return result;

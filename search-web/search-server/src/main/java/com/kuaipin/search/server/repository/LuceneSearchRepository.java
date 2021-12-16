@@ -7,7 +7,7 @@ import com.kuaipin.search.server.entity.po.SearchRecord;
  * @Author: ljf
  * @DateTime: 2021/12/13 14:39
  */
-public interface SearchRecordRepository {
+public interface LuceneSearchRepository {
 
     /**
      * 查询所有搜索记录

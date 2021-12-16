@@ -1,9 +1,7 @@
 package com.kuaipin.search.server.repository.impl.mapper;
 
-import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.search.server.entity.po.SearchRecord;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
