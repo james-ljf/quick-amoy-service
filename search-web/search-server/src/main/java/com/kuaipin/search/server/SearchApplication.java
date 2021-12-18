@@ -2,6 +2,8 @@ package com.kuaipin.search.server;
 
 import com.kuaipin.common.annotation.StarterApplication;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
@@ -12,11 +14,14 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @StarterApplication
 @EnableDiscoveryClient
-@MapperScan(value = "com.kuaipin.search.server.repository.impl.mapper")
+@MapperScan(value = {"com.kuaipin.search.server.repository.impl.mapper", "com.kuaipin.search.server.mapper"})
 public class SearchApplication {
+
+    private static final Logger logger = LoggerFactory.getLogger(SearchApplication.class);
 
     public static void main(String[] args){
         SpringApplication.run(SearchApplication.class, args);
+        logger.info("search-web 服务成功启动......");
     }
 
 }

@@ -17,6 +17,8 @@ public class Goods {
 
     private String edition;
 
-    private String brank;
+    private String brand;
+
+    private String type;
 
 }

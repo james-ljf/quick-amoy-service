@@ -15,7 +15,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class SearchRecord implements Serializable {
 
-    private Integer id;
+    private Long id;
 
     /**
      * 搜索记录id

@@ -21,9 +21,9 @@
 
     <properties>
         <java.version>11</java.version>
-        <springcloud.version>2020.0.1</springcloud.version>
-        <springcloud.alibaba.version>2021.1</springcloud.alibaba.version>
-        <springboot.version>2.4.2</springboot.version>
+        <springcloud.version>Hoxton.SR8</springcloud.version>
+        <springcloud.alibaba.version>2.2.3.RELEASE</springcloud.alibaba.version>
+        <springboot.version>2.3.2.RELEASE</springboot.version>
         <junit.version>4.13.1</junit.version>
         <fastjson.version>1.2.67</fastjson.version>
         <lombok.version>1.18.20</lombok.version>

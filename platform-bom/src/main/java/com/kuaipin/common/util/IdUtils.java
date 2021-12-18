@@ -1,6 +1,7 @@
 package com.kuaipin.common.util;
 
 import cn.hutool.core.lang.ObjectId;
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 
 /**
@@ -31,6 +32,15 @@ public class IdUtils {
      */
     public static String randomUUID() {
         return IdUtil.randomUUID();
+    }
+
+    /**
+     * 雪花算法id
+     * @return  Long
+     */
+    public static Long snowflakeId(){
+        Snowflake snowflake = IdUtil.getSnowflake();
+        return snowflake.nextId();
     }
 
 }

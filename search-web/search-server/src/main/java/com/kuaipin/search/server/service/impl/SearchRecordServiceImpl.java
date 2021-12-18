@@ -6,7 +6,7 @@ import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.search.server.entity.po.SearchRecord;
 import com.kuaipin.search.server.entity.response.SearchHistoryVO;
-import com.kuaipin.search.server.repository.LuceneSearchRepository;
+import com.kuaipin.search.server.repository.SearchRepository;
 import com.kuaipin.search.server.service.SearchRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
 public class SearchRecordServiceImpl implements SearchRecordService {
 
     @Autowired
-    private LuceneSearchRepository luceneSearchRepository;
+    private SearchRepository searchRepository;
 
     @Override
     public Page<SearchRecord> findAllSearchRecord(PageDTO pageDTO) {
@@ -34,7 +34,7 @@ public class SearchRecordServiceImpl implements SearchRecordService {
         // 物理分页
         PageMethod.startPage(pageNum, pageSize);
         // 查询所有搜索记录并分页
-        Page<SearchRecord> result = luceneSearchRepository.findAllSearchRecord();
+        Page<SearchRecord> result = searchRepository.findAllSearchRecord();
         log.info("[210.findAllSearchRecord page success] : req = {}, result = {}", pageDTO, result);
         if (result != null){
             result.setPageNum(pageNum);

@@ -1,6 +1,5 @@
 
-
-#dubbo:
+dubbo:
 #  scan:
 #    base-packages: com.kuaipin.search.server.service.dubbo
 #  protocol:
@@ -10,15 +9,14 @@
 #    qos-enable: false
 #  registry:
 #    address: spring-cloud://127.0.0.1
+  cloud:
+    subscribed-services: 'admin-service'
 
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
 
 logging:
   level:
