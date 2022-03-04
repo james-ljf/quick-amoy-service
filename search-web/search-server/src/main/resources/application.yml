@@ -10,7 +10,7 @@ dubbo:
 #  registry:
 #    address: spring-cloud://127.0.0.1
   cloud:
-    subscribed-services: 'admin-service'
+    subscribed-services: 'search-server'
 
 pagehelper:
   helperDialect: mysql

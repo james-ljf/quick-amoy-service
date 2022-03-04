@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 商品品类分类
  * @Author: ljf
  * @DateTime: 2021/12/18 13:05
  */
