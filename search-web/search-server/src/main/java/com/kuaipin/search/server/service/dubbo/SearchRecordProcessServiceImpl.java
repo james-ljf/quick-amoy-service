@@ -33,7 +33,6 @@ public class SearchRecordProcessServiceImpl implements SearchRecordProcessServic
         log.info("[230.get api parameter]: pageDTO = " + pageDTO);
         // 查询所有搜索记录
         Page<SearchRecord> searchRecordPage = searchRecordService.findAllSearchRecord(pageDTO);
-        // 封装结果泛型转换
         Page<SearchRecordDTO> result = pageConvert.convertSearchRecordToDTO(searchRecordPage);
         log.info("[230.findAllSearchRecord success]: result = " + result);
         return result;

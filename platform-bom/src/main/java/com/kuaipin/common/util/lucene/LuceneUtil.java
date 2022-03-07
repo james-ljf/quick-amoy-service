@@ -55,10 +55,10 @@ public class LuceneUtil {
      * 创建索引读取工具
      */
     public static IndexReader buildIndexReader(){
-        if (SingletonDirectory.getDirectory() == null){
+        if (SingletonDirectory.buildFsDirectory() == null){
             return null;
         }
-        Directory directory = SingletonDirectory.getDirectory();
+        Directory directory = SingletonDirectory.buildFsDirectory();
         try{
             // 索引读取工具
             return DirectoryReader.open(directory);
@@ -104,7 +104,6 @@ public class LuceneUtil {
                 indexWriter.close();
             } catch (IOException e) {
                 log.warn("[indexWriter close]: error={}, indexWriter={}", e, indexWriter);
-                indexWriter = null;
             }
         }
     }
@@ -118,7 +117,7 @@ public class LuceneUtil {
             try {
                 reader.close();
             } catch (IOException e) {
-                reader = null;
+                e.printStackTrace();
             }
         }
     }

@@ -52,12 +52,14 @@ public class CreateDataServiceTest {
             Set<String> set = new HashSet<>(resList);
             List<SmallCategory> smallCategoryList = new ArrayList<>();
             for (String s : set) {
+                if (s.equals("笔记本")){
+                    continue;
+                }
                 SmallCategory smallCategory = new SmallCategory();
                 smallCategory.setSTypeName(s);
                 smallCategory.setCreateTime(new Date());
                 smallCategory.setUpdateTime(new Date());
                 smallCategory.setSTypeId(IdUtils.snowflakeId());
-                smallCategory.setBTypeId(111L);
                 smallCategoryList.add(smallCategory);
             }
             int size = goodsTestMapper.insertSmallCategory(smallCategoryList);
@@ -76,28 +78,40 @@ public class CreateDataServiceTest {
         List<Goods> goodsList = goodsTestMapper.findAllGoods();
         // 获取商家名字并去重
         Set<String> set = goodsList.stream().map(Goods::getBoss).collect(Collectors.toSet());
+        // 获取现有的表中的商家数据
+        List<BusinessInfo> newBusinessInfos = goodsTestMapper.findAllBusiness();
         // 存放商家信息
         List<BusinessInfo> businessInfoList = new ArrayList<>();
         for (String s : set) {
-            BusinessInfo businessInfo = new BusinessInfo();
-            businessInfo.setBusinessId(IdUtils.snowflakeId())
-                    .setIsAuthentication(1)
-                    .setCreateTime(new Date())
-                    .setUpdateTime(new Date());
-            // 从商家名字判断是否是旗舰店
-            if (s != null && s.contains("旗舰店")){
-                businessInfo.setIsFlagship(1);
-            }else{
-                businessInfo.setIsFlagship(0);
+            int imp = 1;
+            for (BusinessInfo businessInfo : newBusinessInfos) {
+                if (s != null && s.equals(businessInfo.getBusinessName())) {
+                    imp = 0;
+                    break;
+                }
             }
-            // 名字为空则设置为官方旗舰店
-            if (s == null){
-                businessInfo.setBusinessName("官方自营旗舰店");
-                businessInfo.setIsFlagship(1);
-            }else{
-                businessInfo.setBusinessName(s);
+            // 现有商家表中不存在该商家则添加
+            if (imp != 0){
+                BusinessInfo businessInfo = new BusinessInfo();
+                businessInfo.setBusinessId(IdUtils.snowflakeId())
+                        .setIsAuthentication(1)
+                        .setCreateTime(new Date())
+                        .setUpdateTime(new Date());
+                // 从商家名字判断是否是旗舰店
+                if (s != null && s.contains("旗舰店")){
+                    businessInfo.setIsFlagship(1);
+                }else{
+                    businessInfo.setIsFlagship(0);
+                }
+                // 名字为空则设置为官方旗舰店
+                if (s == null){
+                    businessInfo.setBusinessName("官方自营旗舰店");
+                    businessInfo.setIsFlagship(1);
+                }else{
+                    businessInfo.setBusinessName(s);
+                }
+                businessInfoList.add(businessInfo);
             }
-            businessInfoList.add(businessInfo);
         }
         // 添加商家信息
         int insertSum = goodsTestMapper.insertBusinessInfo(businessInfoList);
@@ -107,7 +121,7 @@ public class CreateDataServiceTest {
     // 添加商品数据
     @Test
     public void createGoodsInfo(){
-        // 查询所有品类信息
+        // 查询所00有品类信0息0
         List<SmallCategory> smallCategoryList = goodsTestMapper.findAllSmallCategory();
         // 存放品类和品类id
         Map<String, Object> categoryMap = new HashMap<>();
@@ -130,6 +144,12 @@ public class CreateDataServiceTest {
         // 存放商品信息
         List<GoodsInfo> goodsInfoList = new ArrayList<>();
         for (Goods goods : goodsRepeatList) {
+            // 查询现有数据库中是否存在该商品
+            String name = goodsTestMapper.findOldGoods(goods.getName());
+            if (name != null){
+                // 不为空，则不添加该商品
+                continue;
+            }
             // 获取并设置商品信息实体属性值
             GoodsInfo goodsInfo = new GoodsInfo();
             goodsInfo.setGoodsId(IdUtils.objectId())
@@ -159,35 +179,33 @@ public class CreateDataServiceTest {
      * @return  价格
      */
     public static BigDecimal getPrice(String type){
-        if (type.equals("单肩背包") || type.equals("双肩背包") || type.equals("配件")
-                || type.equals("男士卫衣") || type.equals("围巾/围脖") || type.equals("护肤")
-                || type.equals("挎包") || type.equals("腰包/卡包/配件包") || type.equals("运动帽")
-                || type.equals("运动水壶")){
-            BigDecimal b1 = new BigDecimal("50.00");
-            BigDecimal b2 = new BigDecimal("300.00");
+        if (type.equals("手机壳") || type.equals("钢化膜") || type.equals("充电器")){
+            BigDecimal b1 = new BigDecimal("30.00");
+            BigDecimal b2 = new BigDecimal("150.00");
             return getRandom(b1, b2);
-        }else if (type.equals("笔记本")){
-            BigDecimal b1 = new BigDecimal("4500.00");
+        }else if (type.equals("相机")|| type.equals("笔记本")){
+            BigDecimal b1 = new BigDecimal("3000.00");
             BigDecimal b2 = new BigDecimal("12000.00");
             return getRandom(b1, b2);
-        }else if (type.equals("豆浆机") || type.equals("压力锅")|| type.equals("电饭煲")|| type.equals("电磁炉")
-                || type.equals("面包机") || type.equals("微波炉") || type.equals("咖啡机")
-                || type.equals("烤箱") || type.equals("空气炸锅") || type.equals("电水壶")
-                || type.equals("口红")){
+        }else if (type.equals("男士风衣") || type.equals("机械键盘")|| type.equals("鼠标")|| type.equals("休闲西装")
+                || type.equals("男士外套") || type.equals("夹克") || type.equals("卫衣女")
+                || type.equals("连衣裙") || type.equals("针织衫女")){
             BigDecimal b1 = new BigDecimal("100.00");
-            BigDecimal b2 = new BigDecimal("1000.00");
+            BigDecimal b2 = new BigDecimal("600.00");
             return getRandom(b1, b2);
-        }else if (type.equals("运动袜") || type.equals("运动毛巾")){
-            BigDecimal b1 = new BigDecimal("20.00");
-            BigDecimal b2 = new BigDecimal("100.00");
+        }else if (type.equals("相机镜头")){
+            BigDecimal b1 = new BigDecimal("500.00");
+            BigDecimal b2 = new BigDecimal("1500.00");
             return getRandom(b1, b2);
-        }else if (type.equals("骑行装备")){
-            BigDecimal b1 = new BigDecimal("300.00");
-            BigDecimal b2 = new BigDecimal("2000.00");
+        }else if (type.equals("衬衫") || type.equals("工装裤") || type.equals("牛仔裤") || type.equals("男士休闲裤")
+                || type.equals("男士短裤") || type.equals("衬衫女") || type.equals("半身裙") || type.equals("T恤女")
+                || type.equals("休闲裤女") || type.equals("打底裤女") || type.equals("牛仔裤女") || type.equals("短裙")){
+            BigDecimal b1 = new BigDecimal("50.00");
+            BigDecimal b2 = new BigDecimal("500.00");
             return getRandom(b1, b2);
         }else{
-            BigDecimal b1 = new BigDecimal("1000.00");
-            BigDecimal b2 = new BigDecimal("8000.00");
+            BigDecimal b1 = new BigDecimal("500.00");
+            BigDecimal b2 = new BigDecimal("2000.00");
             return getRandom(b1, b2);
         }
     }
@@ -198,10 +216,8 @@ public class CreateDataServiceTest {
         // 生成随机数
         int n = (int) (Math.random() * (maxF - minF)+ minF);
         String price = String.valueOf(n) + ".00";
-        System.out.println(price);
-        BigDecimal bigDecimal = new BigDecimal(price);
         // 返回保留两位小数的随机数
-        return bigDecimal;
+        return new BigDecimal(price);
     }
 
 }

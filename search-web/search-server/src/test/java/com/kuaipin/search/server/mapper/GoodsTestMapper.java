@@ -94,4 +94,11 @@ public interface GoodsTestMapper {
     @Select("select name, brand, edition, boss, pic, type from goods")
     List<Goods> findAllGoods();
 
+    /**
+     * 查询现有的商品数据
+     * @return  商品数据列表
+     */
+    @Select("select goods_name from goods_info where goods_name = #{name}")
+    String findOldGoods(@Param("name") String goodsName);
+
 }

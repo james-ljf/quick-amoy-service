@@ -9,16 +9,29 @@ import org.apache.lucene.store.Directory;
  * @DateTime: 2021/12/12 23:18
  */
 public class SingletonDirectory {
+
     private SingletonDirectory(){}
 
-    private static class SingleDirectory{
+    private static class SingleRamDirectory{
         private static final Directory DIRECTORY = LuceneUtil.buildRAMDirectory();
+    }
+    private static class SingleFsDirectory{
+        private static final Directory DIRECTORY = LuceneUtil.buildFSDirectory("");
     }
 
     /**
-     * 内部类方法获取单例
+     * 内部类方法获取RAM单例
+     * @return 索引目录
      */
-    public static Directory getDirectory(){
-        return SingleDirectory.DIRECTORY;
+    public static Directory buildRamDirectory(){
+        return SingleRamDirectory.DIRECTORY;
+    }
+
+    /**
+     * 内部类方法获取FS单例
+     * @return  索引目录
+     */
+    public static Directory buildFsDirectory(){
+        return SingleFsDirectory.DIRECTORY;
     }
 }
