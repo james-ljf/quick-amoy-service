@@ -159,8 +159,8 @@ public class CreateDataServiceTest {
                     .setSTypeId((Long) categoryMap.get(goods.getType()))
                     .setGoodsPic(goods.getPic())
                     .setBusinessId((Long) businessMap.get(goods.getBoss() == null ? "官方自营旗舰店" : goods.getBoss()))
-                    .setGoodsComment((long) (Math.random()*(99999-1000) + 1000))
-                    .setGoodsPrice(getPrice(goods.getType()))
+                    .setGoodsComment((int) (Math.random()*(99999-1000) + 1000))
+                    .setGoodsPrice(null)
                     .setCreateTime(new Date())
                     .setUpdateTime(new Date());
             // 去除商品规格的括号

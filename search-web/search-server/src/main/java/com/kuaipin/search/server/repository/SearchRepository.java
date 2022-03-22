@@ -1,6 +1,7 @@
 package com.kuaipin.search.server.repository;
 
 import com.kuaipin.common.entity.Page;
+import com.kuaipin.search.api.entity.SearchRecordDTO;
 import com.kuaipin.search.server.entity.po.SearchRecord;
 
 /**
@@ -13,6 +14,6 @@ public interface SearchRepository {
      * 查询所有搜索记录
      * @return  搜索记录分页列表
      */
-    Page<SearchRecord> findAllSearchRecord();
+    Page<SearchRecordDTO> findAllSearchRecord();
 
 }

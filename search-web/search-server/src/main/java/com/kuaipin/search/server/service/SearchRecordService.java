@@ -3,6 +3,7 @@ package com.kuaipin.search.server.service;
 import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.PageDTO;
+import com.kuaipin.search.api.entity.SearchRecordDTO;
 import com.kuaipin.search.server.entity.po.SearchRecord;
 import com.kuaipin.search.server.entity.response.SearchHistoryVO;
 
@@ -20,7 +21,7 @@ public interface SearchRecordService {
      * @param pageDTO   分页请求体
      * @return  搜索记录分页对象
      */
-    Page<SearchRecord> findAllSearchRecord(PageDTO pageDTO);
+    Page<SearchRecordDTO> findAllSearchRecord(PageDTO pageDTO);
 
     /**
      * 用于查询用户的搜索历史（搜索记录最近的7条）

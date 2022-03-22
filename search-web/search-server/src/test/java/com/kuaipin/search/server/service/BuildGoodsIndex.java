@@ -3,12 +3,11 @@ package com.kuaipin.search.server.service;
 import com.kuaipin.common.constants.SingletonDirectory;
 import com.kuaipin.common.util.lucene.LuceneUtil;
 import com.kuaipin.search.server.SearchApplication;
+import com.kuaipin.search.server.entity.GoodsInfoTest;
 import com.kuaipin.search.server.entity.po.GoodsInfo;
 import com.kuaipin.search.server.mapper.SearchGoodsMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.junit.Test;
@@ -17,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +34,43 @@ public class BuildGoodsIndex {
     private SearchGoodsMapper goodsMapper;
 
     @Test
-    public void indexTest(){
+    public void indexTest() throws IOException {
         // 获取所有商品数据
-        List<GoodsInfo> goodsInfoList = goodsMapper.findGoodsInfo();
+        List<GoodsInfoTest> goodsInfoList = goodsMapper.findGoodsInfo();
         log.info("共获取商品数据" + goodsInfoList.size() + "条");
         // 创建索引
         Directory directory = SingletonDirectory.buildFsDirectory();
         IndexWriter indexWriter = LuceneUtil.buildIndexWriter(directory);
         // 索引存放的文档
         List<Document> documents = new ArrayList<>();
-        for (GoodsInfo goodsInfo : goodsInfoList) {
+        // 建立索引文档
+        for (GoodsInfoTest goodsInfo : goodsInfoList) {
             Document document = new Document();
+            document.add(new StringField("goods_id", goodsInfo.getGoodsId(), Field.Store.YES));
             document.add(new StringField("goods_number", goodsInfo.getGoodsNumber().toString(), Field.Store.YES));
             document.add(new StringField("goods_name", goodsInfo.getGoodsName(), Field.Store.YES));
+            document.add(new StringField("goods_brand", goodsInfo.getGoodsBrand(), Field.Store.YES));
+            document.add(new StringField("goods_pic", goodsInfo.getGoodsPic(), Field.Store.YES));
+            document.add(new StringField("goods_edition", goodsInfo.getGoodsEdition(), Field.Store.YES));
+            document.add(new StringField("s_type_id", goodsInfo.getSTypeId().toString(), Field.Store.YES));
+            document.add(new StringField("business_id", goodsInfo.getBusinessId().toString(), Field.Store.YES));
+            document.add(new IntPoint("goods_price", Double.valueOf(goodsInfo.getGoodsPrice()).intValue()));
+            document.add(new StringField("goods_price", goodsInfo.getGoodsPrice(), Field.Store.YES));
+            document.add(new IntPoint("goods_comment", goodsInfo.getGoodsComment()));
+            document.add(new StringField("goods_comment", String.valueOf(goodsInfo.getGoodsComment()), Field.Store.YES));
+            document.add(new StringField("business_name", goodsInfo.getBusinessName(), Field.Store.YES));
+            document.add(new StringField("s_type_name", goodsInfo.getSTypeName(), Field.Store.YES));
+            document.add(new StringField("type_name", goodsInfo.getTypeName(), Field.Store.YES));
+            document.add(new StringField("create_time", DateTools.dateToString(goodsInfo.getCreateTime(), DateTools.Resolution.DAY), Field.Store.YES));
+            documents.add(document);
         }
+
+        indexWriter.addDocuments(documents);
+        indexWriter.flush();
+        indexWriter.commit();
+        LuceneUtil.close(indexWriter);
+        log.info("[200.buildIndex]: 建立索引成功");
+        documents.forEach(System.out::println);
     }
 
 }

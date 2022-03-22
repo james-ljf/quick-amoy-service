@@ -55,10 +55,10 @@ public class LuceneUtil {
      * 创建索引读取工具
      */
     public static IndexReader buildIndexReader(){
-        if (SingletonDirectory.buildFsDirectory() == null){
+        Directory directory = SingletonDirectory.buildFsDirectory();
+        if (directory == null){
             return null;
         }
-        Directory directory = SingletonDirectory.buildFsDirectory();
         try{
             // 索引读取工具
             return DirectoryReader.open(directory);

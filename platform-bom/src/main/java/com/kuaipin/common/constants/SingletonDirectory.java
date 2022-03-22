@@ -16,7 +16,7 @@ public class SingletonDirectory {
         private static final Directory DIRECTORY = LuceneUtil.buildRAMDirectory();
     }
     private static class SingleFsDirectory{
-        private static final Directory DIRECTORY = LuceneUtil.buildFSDirectory("");
+        private static final Directory DIRECTORY = LuceneUtil.buildFSDirectory("D:\\毕设\\index-lucene");
     }
 
     /**

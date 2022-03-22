@@ -5,7 +5,6 @@ import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.search.api.entity.SearchRecordDTO;
 import com.kuaipin.search.api.service.SearchRecordProcessService;
 import com.kuaipin.search.server.convert.PageConvert;
-import com.kuaipin.search.server.entity.po.SearchRecord;
 import com.kuaipin.search.server.service.SearchRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -30,10 +29,9 @@ public class SearchRecordProcessServiceImpl implements SearchRecordProcessServic
 
     @Override
     public Page<SearchRecordDTO> findAllSearchRecord(PageDTO pageDTO) {
-        log.info("[230.get api parameter]: pageDTO = " + pageDTO);
+        log.info("[230.findAllSearchRecord dubbo api]: req = " + pageDTO);
         // 查询所有搜索记录
-        Page<SearchRecord> searchRecordPage = searchRecordService.findAllSearchRecord(pageDTO);
-        Page<SearchRecordDTO> result = pageConvert.convertSearchRecordToDTO(searchRecordPage);
+        Page<SearchRecordDTO> result = searchRecordService.findAllSearchRecord(pageDTO);
         log.info("[230.findAllSearchRecord success]: result = " + result);
         return result;
     }

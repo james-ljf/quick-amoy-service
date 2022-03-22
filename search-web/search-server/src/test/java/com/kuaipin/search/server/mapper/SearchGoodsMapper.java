@@ -1,6 +1,6 @@
 package com.kuaipin.search.server.mapper;
 
-import com.kuaipin.search.server.entity.po.GoodsInfo;
+import com.kuaipin.search.server.entity.GoodsInfoTest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,8 +13,13 @@ import java.util.List;
 @Mapper
 public interface SearchGoodsMapper {
 
-    @Select("select goods_number, goods_name, goods_brand, s_type_id, goods_pic, goods_edition, business_id, goods_comment," +
-            "goods_stock, goods_price from goods_info")
-    List<GoodsInfo> findGoodsInfo();
+    @Select("SELECT g.goods_id, g.goods_number, g.goods_name, g.goods_brand, g.s_type_id," +
+            " g.goods_pic, g.goods_edition, g.business_id, g.goods_comment, g.goods_price, g.create_time," +
+            " b.business_name, gs.s_type_name, gb.type_name " +
+            "FROM goods_info as g " +
+            "left join business_info as b on g.business_id = b.business_id  " +
+            "left join goods_small_category as gs on g.s_type_id = gs.s_type_id " +
+            "left join goods_big_category as gb on gs.b_type_id = gb.type_id")
+    List<GoodsInfoTest> findGoodsInfo();
 
 }
