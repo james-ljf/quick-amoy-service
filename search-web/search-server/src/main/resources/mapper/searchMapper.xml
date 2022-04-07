@@ -5,10 +5,19 @@
 <mapper namespace="com.kuaipin.search.server.repository.impl.mapper.SearchMapper">
 
     <select id="selectSearchRecordByPage" resultType="com.kuaipin.search.api.entity.SearchRecordDTO">
-        SELECT id, search_id, search_keyword, search_extend, u_id, create_time, update_time
+        SELECT search_id, search_keyword, search_extend, u_id, create_time, update_time
         FROM search_record AS sr
         LEFT JOIN user_info AS u
         ON sr.u_id = u.u_id
+    </select>
+
+    <select id="selectSearchRecordByTime" resultType="com.kuaipin.search.server.entity.po.SearchRecord">
+        SELECT search_id, search_keyword, search_extend
+        FROM search_record
+        ORDER BY create_time DESC LIMIT #{size}
+        <if test="uid != null">
+            WHERE u_id = #{uid}
+        </if>
     </select>
 
 </mapper>

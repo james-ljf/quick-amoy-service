@@ -59,6 +59,18 @@ public interface Code extends Serializable {
         }
     };
 
+    Code RESULT_NULL = new Code() {
+        @Override
+        public String getCode() {
+            return "5001";
+        }
+
+        @Override
+        public String getMsg() {
+            return "暂时没有找到内容";
+        }
+    };
+
     /**
      * 自定义Code
      * @return  Code

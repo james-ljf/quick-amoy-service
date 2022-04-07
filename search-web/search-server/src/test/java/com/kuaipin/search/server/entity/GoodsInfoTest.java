@@ -38,7 +38,7 @@ public class GoodsInfoTest implements Serializable {
     private String goodsBrand;
 
     /**
-     * 品类id
+     * 小品类id
      */
     private Long sTypeId;
 
@@ -75,6 +75,10 @@ public class GoodsInfoTest implements Serializable {
      * 商家名字
      */
     private String businessName;
+    /**
+     * 商家是否已认证
+     */
+    private Integer isFlagship;
     /**
      * 小品类名字
      */

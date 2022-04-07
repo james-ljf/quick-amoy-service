@@ -37,7 +37,7 @@ public class GoodsInfoVO implements Serializable {
     private String goodsBrand;
 
     /**
-     * 品类id
+     * 小品类id
      */
     private Long sTypeId;
 
@@ -74,6 +74,10 @@ public class GoodsInfoVO implements Serializable {
      * 商家名字
      */
     private String businessName;
+    /**
+     * 是否是旗舰店（1是,0不是）
+     */
+    private String isFlagship;
     /**
      * 小品类名字
      */

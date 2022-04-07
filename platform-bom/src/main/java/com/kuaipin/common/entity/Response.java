@@ -1,6 +1,7 @@
 package com.kuaipin.common.entity;
 
 import com.kuaipin.common.annotation.Description;
+import com.kuaipin.common.constants.ErrorEnum;
 import com.kuaipin.common.entity.dto.Code;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,12 +50,25 @@ public class Response<T> implements Serializable {
         return generateResponse(false, code, null);
     }
 
+    public static <T> Response<T> fail(ErrorEnum errorEnum) {
+        return generateResponse(false, errorEnum, null);
+    }
+
     private static <T> Response<T> generateResponse(boolean isSuccess, Code code, T result){
         Response<T> response = new Response<>();
         response.setCode(code.getCode())
                 .setMsg(code.getMsg())
                 .setResult(result)
                 .setSuccess(isSuccess);
+        return response;
+    }
+
+    private static <T> Response<T> generateResponse(boolean isSuccess, ErrorEnum errorEnum, T result){
+        Response<T> response = new Response<>();
+        response.setCode(errorEnum.getCode())
+                .setMsg(errorEnum.getMsg())
+                .setResult(result)
+                .setSuccess(false);
         return response;
     }
     private static <T> Response<T> generateResponse(boolean isSuccess, Code code, T result, T extend){

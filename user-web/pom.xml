@@ -16,4 +16,12 @@
 
     <artifactId>user-web</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.kuaipin</groupId>
+            <artifactId>platform-bom</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
 </project>

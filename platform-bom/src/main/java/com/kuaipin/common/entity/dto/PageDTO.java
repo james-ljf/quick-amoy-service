@@ -20,7 +20,7 @@ public class PageDTO implements Serializable {
     /** 当前页 */
     private Integer pageNum;
 
-    /** 页面记录大小 */
+    /** 每页数量 */
     private Integer pageSize;
 
     @Override

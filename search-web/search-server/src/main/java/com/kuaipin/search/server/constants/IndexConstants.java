@@ -56,6 +56,10 @@ public interface IndexConstants {
      */
     String BUSINESS_NAME = "business_name";
     /**
+     * 商家是否是旗舰店 1 是 0 不是
+     */
+    String IS_FLAGSHIP = "is_flagship";
+    /**
      * 大品类名字
      */
     String TYPE_NAME = "type_name";
