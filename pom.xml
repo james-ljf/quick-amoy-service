@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>rule-web</module>
+        <module>gateway-web</module>
         <module>admin-web</module>
         <module>platform-bom</module>
         <module>search-web</module>
@@ -21,20 +21,28 @@
 
     <properties>
         <java.version>11</java.version>
-        <game.point.card.version>1.0.0</game.point.card.version>
-        <springcloud.version>Hoxton.SR9</springcloud.version>
-        <springcloud.alibaba.version>2.2.6.RELEASE</springcloud.alibaba.version>
+        <springcloud.version>Hoxton.SR8</springcloud.version>
+        <springcloud.alibaba.version>2.2.3.RELEASE</springcloud.alibaba.version>
         <springboot.version>2.3.2.RELEASE</springboot.version>
+        <junit.version>4.13.1</junit.version>
         <fastjson.version>1.2.67</fastjson.version>
-        <lombok.version>1.16.18</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
         <alipay.version>4.9.5.ALL</alipay.version>
         <pagehelper.version>1.4.0</pagehelper.version>
-        <mysql.version>5.1.47</mysql.version>
+        <mybatis.version>2.2.0</mybatis.version>
+        <mysql.version>8.0.16</mysql.version>
         <hutool.version>5.7.14</hutool.version>
         <common.pool.version>2.10.0</common.pool.version>
         <druid.version>1.2.8</druid.version>
         <jjwt.version>0.2</jjwt.version>
         <pagehelper.version>1.2.13</pagehelper.version>
+        <axis.version>1.7.9</axis.version>
+        <aliyun-java-sdk-core.version>4.3.3</aliyun-java-sdk-core.version>
+        <aliyun-sdk-oss.version>3.1.0</aliyun-sdk-oss.version>
+        <javafaker.version>1.0.2</javafaker.version>
+        <lucene.version>7.3.1</lucene.version>
+        <jieba.version>1.0.2</jieba.version>
+        <jcseg.version>2.6.2</jcseg.version>
     </properties>
 
     <dependencyManagement>
@@ -64,11 +72,25 @@
                 <scope>import</scope>
             </dependency>
 
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
             <!--json-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <!--集合工具类-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.3</version>
             </dependency>
 
             <!--lombok-->
@@ -94,6 +116,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
@@ -102,7 +130,7 @@
 
             <dependency>
                 <groupId>cn.hutool</groupId>
-                <artifactId>hutool-captcha</artifactId>
+                <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
             </dependency>
 
@@ -112,12 +140,74 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!--jieba分词-->
+            <dependency>
+                <groupId>com.huaban</groupId>
+                <artifactId>jieba-analysis</artifactId>
+                <version>${jieba.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>jcseg-core</artifactId>
+                <version>${jcseg.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>jcseg-analyzer</artifactId>
+                <version>${jcseg.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
             </dependency>
 
+            <!--aliyun oss-->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java-sdk-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun-sdk-oss.version}</version>
+            </dependency>
+
+            <!--lucene搜索引擎-->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-core</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-common</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-highlighter</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-smartcn</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-suggest</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -126,10 +216,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>utf-8</encoding>
+                    <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
         </plugins>

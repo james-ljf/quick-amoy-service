@@ -11,7 +11,6 @@ import java.util.Properties;
  * @author lijf
  */
 @Configuration
-
 public class PageHelperConfig {
     @Bean
     public PageHelper pageHelper(){

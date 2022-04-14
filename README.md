@@ -1,10 +1,12 @@
-# game-point-card
+# kuaipin-service
 
 #### 介绍
 快拼电商搜索系统
 
 #### 软件架构
-基于springcloud+springboot+Lucene+mysql
+基于springcloud+springboot+nacos+Lucene
+db:mysql
+cache:redis
 
 
 #### 安装教程

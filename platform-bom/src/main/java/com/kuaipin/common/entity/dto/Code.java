@@ -38,7 +38,7 @@ public interface Code extends Serializable {
     Code ERROR_PARAMS = new Code() {
         @Override
         public String getCode() {
-            return "8010";
+            return "4444";
         }
 
         @Override
@@ -59,8 +59,22 @@ public interface Code extends Serializable {
         }
     };
 
+    Code RESULT_NULL = new Code() {
+        @Override
+        public String getCode() {
+            return "5001";
+        }
+
+        @Override
+        public String getMsg() {
+            return "暂时没有找到内容";
+        }
+    };
+
     /**
      * 自定义Code
+     * @param code 状态码
+     * @param msg 信息
      * @return  Code
      */
     static Code business(String code, String msg){

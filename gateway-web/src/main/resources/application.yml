@@ -1,0 +1,46 @@
+server:
+  port: 10090
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: kuaipin
+        namespace: public
+    gateway:
+      discovery:
+        locator:
+          # 让gateway可以发现注册中心中的服务
+          enabled: true
+      httpclient:
+        connect-timeout: 10000
+        response-timeout: 8s
+      routes:
+        # 搜索服务
+        - id: search-web # 当前路由的标识
+          uri: lb://search-service # lb指的是从注册中心中按照名称获取微服务,并遵循负载均衡策略
+          predicates:
+            - Path=/pin/**
+          filters:
+            - RewritePath=/pin/(?<segment>.*), /$\{segment}
+        # 用户服务
+        - id: user-web
+          uri: lb://user-service
+          predicates:
+            - Path=/pin/**
+          filters:
+            - RewritePath=/pin/(?<segment>.*), /$\{segment}
+        # 管理员服务
+        - id: admin-web
+        uri: lb://admin-service
+        predicates:
+          - Path=/pin/**
+        filters:
+          - RewritePath=/pin/(?<segment>.*), /$\{segment}
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: debug

@@ -14,8 +14,8 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan(basePackages = "com.game")
+@ComponentScan(value = "com.kuaipin")
 public @interface StarterApplication {
 }
