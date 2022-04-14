@@ -4,6 +4,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.kuaipin.common.annotation.AccessLimit;
 import com.kuaipin.common.exception.BizBusinessException;
 import com.kuaipin.common.util.RedisUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: ljf
  * @DateTime: 2022/4/5 14:54
  */
+@Slf4j
 @Component
 public class AccessLimitInterceptor implements HandlerInterceptor {
 
@@ -44,7 +46,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             String key = ServletUtil.getClientIP(request, (String) null) + request.getRequestURI();
             // 获取redis中某时间段已经访问的次数
             Integer maxLimit = (Integer) RedisUtil.get(key);
-            if (maxLimit == null){
+            if (ObjectUtils.isEmpty(maxLimit)){
                 RedisUtil.set(key, 1, sec, TimeUnit.SECONDS);
             }else if (maxLimit < limit){
                 // 已经访问的次数还没达到限制次数
@@ -52,6 +54,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             }else {
                 throw new BizBusinessException("请求频繁，请稍后再试。");
             }
+            log.info("进入接口限流拦截器，当前接口方法:{}，在{}时间段内已请求了{}次", method, sec, maxLimit);
         }
         return true;
     }

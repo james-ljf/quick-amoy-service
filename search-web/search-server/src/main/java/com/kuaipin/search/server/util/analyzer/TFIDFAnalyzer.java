@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.huaban.analysis.jieba.JiebaSegmenter;
+import com.huaban.analysis.jieba.SegToken;
 
 /**
  * @Author: ljf
@@ -18,7 +19,7 @@ import com.huaban.analysis.jieba.JiebaSegmenter;
 public class TFIDFAnalyzer{
 
     static HashMap<String, Double> idfMap;
-    static HashSet<String> stopWordsSet;
+    static HashSet<String> stopWordSet;
     static double idfMedian;
 
     /**
@@ -26,21 +27,20 @@ public class TFIDFAnalyzer{
      *
      * @param content 需要分析的文本/文档内容
      * @param topN    需要返回的tfidf值最高的N个关键词，若超过content本身含有的词语上限数目，则默认返回全部
-     * @return
      */
     public List<Keyword> analyze(String content, int topN) {
         List<Keyword> keywordList = new ArrayList<>();
 
-        if (stopWordsSet == null) {
-            stopWordsSet = new HashSet<>();
-            loadStopWords(stopWordsSet, this.getClass().getResourceAsStream("/stop_words.txt"));
+        if (stopWordSet == null) {
+            stopWordSet = new HashSet<>();
+            loadStopWords(stopWordSet, this.getClass().getResourceAsStream("/stop_words.txt"));
         }
         if (idfMap == null) {
             idfMap = new HashMap<>();
             loadIDFMap(idfMap, this.getClass().getResourceAsStream("/idf.txt"));
         }
 
-        Map<String, Double> tfMap = getTF(content);
+        Map<String, Double> tfMap = getTf(content);
         for (String word : tfMap.keySet()) {
             // 若该词不在idf文档中，则使用平均的idf值(可能定期需要对新出现的网络词语进行纳入)
             if (idfMap.containsKey(word)) {
@@ -65,13 +65,10 @@ public class TFIDFAnalyzer{
      * tf值计算公式
      * tf=N(i,j)/(sum(N(k,j) for all k))
      * N(i,j)表示词语Ni在该文档d（content）中出现的频率，sum(N(k,j))代表所有词语在文档d中出现的频率之和
-     *
-     * @param content
-     * @return
      */
-    private Map<String, Double> getTF(String content) {
+    private Map<String, Double> getTf(String content) {
         Map<String, Double> tfMap = new HashMap<>();
-        if (content == null || content.equals("")) {
+        if (content == null || "".equals(content)) {
             return tfMap;
         }
 
@@ -82,7 +79,7 @@ public class TFIDFAnalyzer{
         int wordSum = 0;
         for (String segment : segments) {
             //停用词不予考虑，单字词不予考虑
-            if (!stopWordsSet.contains(segment) && segment.length() > 1) {
+            if (!stopWordSet.contains(segment) && segment.length() > 1) {
                 wordSum++;
                 if (freqMap.containsKey(segment)) {
                     freqMap.put(segment, freqMap.get(segment) + 1);
@@ -102,9 +99,6 @@ public class TFIDFAnalyzer{
 
     /**
      * 默认jieba分词的停词表
-     * url:https://github.com/yanyiwu/nodejieba/blob/master/dict/stop_words.utf8
-     *
-     * @param set
      */
     private void loadStopWords(Set<String> set, InputStream in) {
         BufferedReader bufr;
@@ -125,8 +119,7 @@ public class TFIDFAnalyzer{
     }
 
     /**
-     * idf值本来需要语料库来自己按照公式进行计算，不过jieba分词已经提供了一份很好的idf字典，所以默认直接使用jieba分词的idf字典
-     * url:https://raw.githubusercontent.com/yanyiwu/nodejieba/master/dict/idf.utf8
+     * idf值本来需要语料库来自己按照公式进行计算，默认直接使用jieba分词的idf字典
      */
     private void loadIDFMap(Map<String, Double> map, InputStream in) {
         BufferedReader bufr;
@@ -154,11 +147,18 @@ public class TFIDFAnalyzer{
 
     public static void main(String[] args) {
         String content = "(定制款)2020 新品 Apple MacBook Pro 13.3英寸 笔记本电脑 轻薄本 M1处理器 16GB 256GB银色";
-        int topN = 10;
+        int topN = 70;
         TFIDFAnalyzer tfidfAnalyzer = new TFIDFAnalyzer();
         List<Keyword> list = tfidfAnalyzer.analyze(content, topN);
         for (Keyword word : list) {
             System.out.print(word.getName() + ":" + word.getTfidfvalue() + ",");
+        }
+        JiebaSegmenter segmenter = new JiebaSegmenter();
+        List<String> strings = segmenter.sentenceProcess(content);
+        List<SegToken> segTokens = segmenter.process(content, JiebaSegmenter.SegMode.INDEX);
+        //strings.forEach(System.out::println);
+        for (SegToken segToken : segTokens) {
+            System.out.println(segToken.word + "," + segToken.startOffset + ", " + segToken.endOffset);
         }
     }
 

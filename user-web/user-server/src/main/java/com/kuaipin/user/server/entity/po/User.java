@@ -49,4 +49,16 @@ public class User implements Serializable {
      */
     private Date updateTime;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "uId=" + uId +
+                ", uEmail='" + uEmail + '\'' +
+                ", uPassword='" + uPassword + '\'' +
+                ", uNickname='" + uNickname + '\'' +
+                ", uSex='" + uSex + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

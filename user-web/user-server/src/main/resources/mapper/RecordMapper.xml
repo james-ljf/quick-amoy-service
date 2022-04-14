@@ -16,16 +16,63 @@
         SELECT search_id, search_keyword, search_extend
         FROM search_record
         ORDER BY create_time DESC LIMIT #{size}
+        WHERE is_delete = 0
         <if test="uid != null">
-            WHERE u_id = #{uid}
+             AND u_id = #{uid}
         </if>
     </select>
 
+    <select id="selectSearchRecordByKeyword" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
+        SELECT search_id, search_keyword, search_extend, u_id, create_time, update_time
+        FROM search_record
+        WHERE search_keyword = #{keyword} AND is_delete = 0
+    </select>
+
     <select id="selectBrowseRecordByUid" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
-        SELECT browse_id, goods_id, goods_name, s_type_id, u_id, create_time
+        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time
         FROM browse_record
         ORDER BY create_time DESC LIMIT #{size}
-        WHERE u_id = #{uid}
+        WHERE u_id = #{uid} AND is_delete = 0
     </select>
+
+    <select id="selectBrowseRecordByGoodsNumber" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time, update_time
+        FROM browse_record
+        WHERE u_id = #{uid} AND goods_number = #{gNumber} AND is_delete = 0
+    </select>
+
+    <select id="selectBrowseRecordByPage" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time, update_time
+        FROM browse_record
+        WHERE u_id = #{uid} AND is_delete = 0
+    </select>
+
+    <insert id="insertSearchRecord">
+        INSERT INTO search_record ('search_id', 'search_keyword', 'search_extend', 'u_id', 'create_time', 'update_time')
+        VALUES(#{sr.searchId}, #{sr.searchKeyword}, #{sr.search_extend}, #{sr.uId}, #{sr.createTime}, #{sr.updateTime})
+    </insert>
+
+    <insert id="insertBrowseRecord">
+        INSERT INTO browse_record ('browse_id', 'goods_number', 'goods_name', 's_type_id', 'u_id', 'create_time', 'update_time')
+        VALUES(#{br.browseId}, #{br.goodsNumber}, #{br.goodsName}, #{br.sTypeId}, #{br.uId}, #{br.createTime}, #{br.updateTime})
+    </insert>
+
+    <update id="deleteSearchRecord">
+        UPDATE search_record
+        SET 'is_delete' = 1
+        WHERE 'search_id' = #{sid} AND 'u_id' = #{uid}
+    </update>
+
+    <update id="deleteBrowseRecord">
+        UPDATE browse_record
+        SET 'is_delete' = 1
+        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid}
+    </update>
+
+    <update id="updateBroseRecord">
+        UPDATE browse_record
+        SET 'update_time' = #{br.updateTime}
+        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid} AND 'is_delete' = 0
+    </update>
 
 </mapper>

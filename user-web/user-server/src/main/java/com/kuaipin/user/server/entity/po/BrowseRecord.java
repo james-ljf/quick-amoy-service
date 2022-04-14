@@ -1,5 +1,9 @@
 package com.kuaipin.user.server.entity.po;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +12,9 @@ import java.util.Date;
  * @Author: ljf
  * @DateTime: 2022/4/2 14:00
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BrowseRecord implements Serializable {
 
     /**
@@ -16,9 +23,9 @@ public class BrowseRecord implements Serializable {
     private Long browseId;
 
     /**
-     * 商品id
+     * 商品编号
      */
-    private String goodsId;
+    private Long goodsNumber;
 
     /**
      * 商品名
@@ -49,7 +56,7 @@ public class BrowseRecord implements Serializable {
     public String toString() {
         return "BrowseRecord{" +
                 "browseId=" + browseId +
-                ", goodsId='" + goodsId + '\'' +
+                ", goodsNumber=" + goodsNumber +
                 ", goodsName='" + goodsName + '\'' +
                 ", sTypeId=" + sTypeId +
                 ", uId=" + uId +

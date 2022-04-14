@@ -14,6 +14,8 @@ import java.util.Map;
  */
 public class JwtUtils {
 
+    private JwtUtils(){}
+
     /**
      * token 过期时间
      */
@@ -27,7 +29,7 @@ public class JwtUtils {
     /**
      * 加密/解密 密钥
      */
-    private static final String JWT_SECRET = "kuaipin-service-v1";
+    private static final String JWT_SECRET = "kuaipin-service";
 
     /**
      * 创建JWT

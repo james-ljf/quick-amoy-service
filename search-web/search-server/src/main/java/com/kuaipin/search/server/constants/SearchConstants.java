@@ -40,9 +40,14 @@ public interface SearchConstants {
     int ASSOCIATIONAL_NUM = 7;
 
     /**
+     * 搜索联想推荐词最低数量
+     */
+    int MIN_ASSOCIATIONAL_NUM = 4;
+
+    /**
      * 关键词搜索的每路召回数量
      */
-    int SEARCH_SIZE = 200;
+    int SEARCH_SIZE = 150;
 
     /**
      * 坑位逻辑业务常量
@@ -53,7 +58,7 @@ public interface SearchConstants {
 
     String BRAND = "goods_brand_list";
 
-    String[] MASK = new String[]{G_NAME, BRAND, BRAND, G_NAME, S_NAME, G_NAME, BRAND, G_NAME, S_NAME, G_NAME};
+    String[] MASK = new String[]{G_NAME, G_NAME, S_NAME, G_NAME, S_NAME, G_NAME, G_NAME, G_NAME, S_NAME, G_NAME};
 
 
 }

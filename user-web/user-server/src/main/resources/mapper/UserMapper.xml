@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuaipin.user.server.repository.impl.mapper.UserMapper">
+
+    <select id="selectUserInfo" resultType="com.kuaipin.user.server.entity.po.User">
+        SELECT u_id, u_email
+        FROM user_info
+        WHERE u_email = #{email}
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO user_info ('u_id', 'u_email', 'u_password', 'u_nickname', 'u_sex', 'create_time', 'update_time')
+        VALUES(#{user.uId}, #{user.uEmail}, #{user.uPassword}, #{user.uNickname}, #{user.uSex}, #{user.createTime}, #{user.updateTime})
+    </insert>
+
+</mapper>

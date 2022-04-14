@@ -4,6 +4,7 @@ import com.kuaipin.search.server.constants.IndexConstants;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.util.LuceneUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
@@ -61,12 +62,10 @@ public class EntityCreation {
      * 在结果中高亮显示关键词
      * @param topDocs   搜索结果文档
      * @param searcher  搜索器
-     * @param analyzer  分词器
-     * @param highlighter   高亮实例
      * @param key   对应的key
      * @return  高亮商品列表结果
      */
-    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, Analyzer analyzer, Highlighter highlighter, String key) throws ParseException, IOException, InvalidTokenOffsetsException {
+    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, String key, String keyword) throws ParseException, IOException, InvalidTokenOffsetsException {
         List<GoodsInfoVO> goodsInfoVOList = new ArrayList<>();
         for (ScoreDoc topDoc : topDocs.scoreDocs) {
             Document document = searcher.doc(topDoc.doc);
@@ -89,14 +88,9 @@ public class EntityCreation {
             goodsInfoVO.setCreateTime(DateTools.stringToDate(document.get(IndexConstants.CREATE_TIME)));
             // 关键词高亮
             String goodsVal = document.get(key);
-            TokenStream valStream = analyzer.tokenStream(key, new StringReader(goodsVal));
-            String highVal = highlighter.getBestFragment(valStream, goodsVal);
             if (IndexConstants.GOODS_NAME.equals(key)){
-                goodsInfoVO.setGoodsName(highVal);
-            }else if (IndexConstants.GOODS_BRAND.equals(key)){
-                goodsInfoVO.setGoodsBrand(highVal);
-            }else if (IndexConstants.S_TYPE_NAME.equals(key)){
-                goodsInfoVO.setSTypeName(highVal);
+                String newName = goodsVal.replaceAll(keyword, "<span style='color:red'>" + keyword + "</span>");
+                goodsInfoVO.setGoodsName(newName);
             }
             goodsInfoVOList.add(goodsInfoVO);
         }

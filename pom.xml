@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>rule-web</module>
+        <module>gateway-web</module>
         <module>admin-web</module>
         <module>platform-bom</module>
         <module>search-web</module>
@@ -41,6 +41,8 @@
         <aliyun-sdk-oss.version>3.1.0</aliyun-sdk-oss.version>
         <javafaker.version>1.0.2</javafaker.version>
         <lucene.version>7.3.1</lucene.version>
+        <jieba.version>1.0.2</jieba.version>
+        <jcseg.version>2.6.2</jcseg.version>
     </properties>
 
     <dependencyManagement>
@@ -138,10 +140,23 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!--jieba分词-->
             <dependency>
                 <groupId>com.huaban</groupId>
                 <artifactId>jieba-analysis</artifactId>
-                <version>1.0.2</version>
+                <version>${jieba.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>jcseg-core</artifactId>
+                <version>${jcseg.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.lionsoul</groupId>
+                <artifactId>jcseg-analyzer</artifactId>
+                <version>${jcseg.version}</version>
             </dependency>
 
             <dependency>
@@ -193,9 +208,9 @@
                 <artifactId>lucene-suggest</artifactId>
                 <version>${lucene.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
+
     <build>
         <plugins>
             <plugin>

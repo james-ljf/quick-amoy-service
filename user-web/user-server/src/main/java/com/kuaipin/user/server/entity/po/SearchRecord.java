@@ -15,11 +15,10 @@ import java.util.Date;
 @Accessors(chain = true)
 public class SearchRecord implements Serializable {
 
-
     /**
      * 搜索记录id
      */
-    private String searchId;
+    private Long searchId;
 
     /**
      * 搜索关键字
@@ -34,7 +33,7 @@ public class SearchRecord implements Serializable {
     /**
      * 用户id
      */
-    private String uId;
+    private Long uId;
 
     private Date createTime;
 

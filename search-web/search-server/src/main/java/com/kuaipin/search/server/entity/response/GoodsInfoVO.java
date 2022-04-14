@@ -87,4 +87,29 @@ public class GoodsInfoVO implements Serializable {
      */
     private String typeName;
 
+    /**
+     *  是否是广告位
+     */
+    private String isAdvertising;
+
+    @Override
+    public String toString() {
+        return "GoodsInfoVO{" +
+                "goodsId='" + goodsId + '\'' +
+                ", goodsNumber=" + goodsNumber +
+                ", goodsName='" + goodsName + '\'' +
+                ", goodsBrand='" + goodsBrand + '\'' +
+                ", sTypeId=" + sTypeId +
+                ", goodsPic='" + goodsPic + '\'' +
+                ", goodsEdition='" + goodsEdition + '\'' +
+                ", businessId=" + businessId +
+                ", goodsComment=" + goodsComment +
+                ", goodsPrice='" + goodsPrice + '\'' +
+                ", createTime=" + createTime +
+                ", businessName='" + businessName + '\'' +
+                ", isFlagship='" + isFlagship + '\'' +
+                ", sTypeName='" + sTypeName + '\'' +
+                ", typeName='" + typeName + '\'' +
+                '}';
+    }
 }

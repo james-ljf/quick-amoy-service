@@ -1,6 +1,7 @@
 package com.kuaipin.search.server.entity;
 
 import com.alibaba.fastjson.JSONObject;
+import com.kuaipin.common.exception.BizBusinessException;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.suggest.InputIterator;
@@ -78,7 +79,7 @@ public class KeywordIterator implements InputIterator {
                 // 设定key作为推荐词返回
                 return new BytesRef(key.getBytes(StandardCharsets.UTF_8));
             }catch (Exception e){
-                throw new RuntimeException("无法转换成UTF-8, error = {}", e);
+                throw new BizBusinessException(e.getMessage());
             }
         }else{
             return null;

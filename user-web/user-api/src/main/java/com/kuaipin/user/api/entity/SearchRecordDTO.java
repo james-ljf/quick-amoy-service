@@ -20,7 +20,7 @@ public class SearchRecordDTO implements Serializable {
     /**
      * 搜索记录id
      */
-    private String searchId;
+    private Long searchId;
     /**
      * 搜索关键字
      */
@@ -32,7 +32,7 @@ public class SearchRecordDTO implements Serializable {
     /**
      * 用户id
      */
-    private String uId;
+    private Long uId;
     /**
      * 用户昵称
      */

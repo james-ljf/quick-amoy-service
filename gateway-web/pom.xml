@@ -10,16 +10,23 @@
     </parent>
 
     <name>rule-web</name>
-    <description>策略算法服务</description>
+    <description>网关服务</description>
 
-    <groupId>com.kuaipin</groupId>
-    <artifactId>rule-web</artifactId>
+    <artifactId>gateway-web</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
-    <modules>
-        <module>rule-api</module>
-        <module>rule-server</module>
-    </modules>
 
+    <dependencies>
+        <!-- SpringCloud Gateway -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kuaipin</groupId>
+            <artifactId>platform-bom</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

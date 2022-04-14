@@ -10,8 +10,9 @@ import com.kuaipin.user.server.convert.PageConvert;
 import com.kuaipin.user.server.entity.po.BrowseRecord;
 import com.kuaipin.user.server.entity.po.SearchRecord;
 import com.kuaipin.user.server.service.RecordService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -22,9 +23,10 @@ import java.util.List;
  * @Author: ljf
  * @DateTime: 2021/12/13 14:57
  */
-@Slf4j
 @DubboService
 public class RecordProcessServiceImpl implements RecordProcessService {
+
+    private final Logger log = LoggerFactory.getLogger(RecordProcessServiceImpl.class);
 
     @Autowired
     private PageConvert pageConvert;
@@ -34,30 +36,36 @@ public class RecordProcessServiceImpl implements RecordProcessService {
 
     @Override
     public Page<SearchRecordDTO> allSearchRecord(PageDTO pageDTO) {
-        log.info("[2201.allSearchRecord dubbo api]: req = " + pageDTO);
+        log.info("[2201.allSearchRecord rpc api]: req = {}", pageDTO);
         // 查询所有搜索记录
         Page<SearchRecord> searchRecordPage = recordService.allSearchRecord(pageDTO);
         Page<SearchRecordDTO> result = pageConvert.convertSearchRecordToDTO(searchRecordPage);
-        log.info("[2301.allSearchRecord success]: result = " + result);
+        log.info("[2301.allSearchRecord success]: result = {}", result);
         return result;
     }
 
     @Override
     public List<SearchRecordDTO> latelySearchHistory(Long uId, Integer size) {
-        log.info("[2202.latelySearchHistory dubbo api]: req = {}, {}", uId, size);
+        log.info("[2202.latelySearchHistory rpc api]: req = {}, {}", uId, size);
         List<SearchRecord> searchRecordList = recordService.latelySearchRecord(uId, size);
         List<SearchRecordDTO> result = ObjectUtil.objToList(searchRecordList, SearchRecordDTO.class);
-        log.info("[2302.latelySearchHistory success]: result = " + result);
+        log.info("[2302.latelySearchHistory success]: result = {}", result);
         return result;
     }
 
     @Override
     public List<BrowseRecordDTO> latelyBrowseRecord(Long uId, Integer size) {
-        log.info("[2203.latelyBrowseRecord dubbo api]: req = {}, {}", uId, size);
+        log.info("[2203.latelyBrowseRecord rpc api]: req = {}, {}", uId, size);
         List<BrowseRecord> browseRecordList = recordService.latelyBrowseRecord(uId, size);
         List<BrowseRecordDTO> result = ObjectUtil.objToList(browseRecordList, BrowseRecordDTO.class);
-        log.info("[2303.latelyBrowseRecord success]: result = " + result);
+        log.info("[2303.latelyBrowseRecord success]: result = {}", result);
         return result;
+    }
+
+    @Override
+    public int increaseSearchRecord(SearchRecordDTO searchRecordDTO) {
+        log.info("[2204.increaseSearchRecord rpc api]: req = {}", searchRecordDTO);
+        return recordService.increaseSearchRecord(searchRecordDTO);
     }
 
 }

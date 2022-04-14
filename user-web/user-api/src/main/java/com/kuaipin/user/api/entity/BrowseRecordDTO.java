@@ -25,7 +25,7 @@ public class BrowseRecordDTO implements Serializable {
     /**
      * 商品id
      */
-    private String goodsId;
+    private Long goodsNumber;
 
     /**
      * 商品名
@@ -52,7 +52,7 @@ public class BrowseRecordDTO implements Serializable {
     public String toString() {
         return "BrowseRecord{" +
                 "browseId=" + browseId +
-                ", goodsId='" + goodsId + '\'' +
+                ", goodsNumber='" + goodsNumber + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", sTypeId=" + sTypeId +
                 ", uId=" + uId +

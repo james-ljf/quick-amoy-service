@@ -41,4 +41,13 @@ public interface RecordProcessService {
     @CallableAPI(desc = "根据用户id查询近期浏览记录")
     List<BrowseRecordDTO> latelyBrowseRecord(Long uId, Integer size);
 
+    /**
+     * 增加搜索记录
+     * @param searchRecordDTO   搜索记录
+     * @return  增加数量
+     */
+    @CallableAPI(desc = "增加搜索记录")
+    int increaseSearchRecord(SearchRecordDTO searchRecordDTO);
+
+
 }

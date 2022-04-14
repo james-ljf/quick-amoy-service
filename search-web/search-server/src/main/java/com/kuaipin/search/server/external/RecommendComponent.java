@@ -11,7 +11,6 @@ import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.user.api.entity.BrowseRecordDTO;
 import com.kuaipin.user.api.entity.SearchRecordDTO;
 import com.kuaipin.user.api.service.RecordProcessService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.lucene.index.IndexReader;

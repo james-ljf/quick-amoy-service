@@ -5,17 +5,17 @@ spring:
     timeout: 6000
 
 dubbo:
-#  scan:
-#    base-packages: com.kuaipin.search.server.service.dubbo
-#  protocol:
-#    name: dubbo
-#    port: -1
-#  application:
-#    qos-enable: false
-#  registry:
-#    address: spring-cloud://127.0.0.1
+  scan:
+    base-packages: com.kuaipin.search.server.service.dubbo
+  protocol:
+    name: dubbo
+    port: 20890
+  application:
+    qos-enable: false
+  registry:
+    address: nacos://127.0.0.1:8848
   cloud:
-    subscribed-services: 'search-server'
+    subscribed-services: 'user-web'
 
 pagehelper:
   helperDialect: mysql
