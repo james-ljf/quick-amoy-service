@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * @Author: ljf
@@ -94,22 +95,23 @@ public class GoodsInfoVO implements Serializable {
 
     @Override
     public String toString() {
-        return "GoodsInfoVO{" +
-                "goodsId='" + goodsId + '\'' +
-                ", goodsNumber=" + goodsNumber +
-                ", goodsName='" + goodsName + '\'' +
-                ", goodsBrand='" + goodsBrand + '\'' +
-                ", sTypeId=" + sTypeId +
-                ", goodsPic='" + goodsPic + '\'' +
-                ", goodsEdition='" + goodsEdition + '\'' +
-                ", businessId=" + businessId +
-                ", goodsComment=" + goodsComment +
-                ", goodsPrice='" + goodsPrice + '\'' +
-                ", createTime=" + createTime +
-                ", businessName='" + businessName + '\'' +
-                ", isFlagship='" + isFlagship + '\'' +
-                ", sTypeName='" + sTypeName + '\'' +
-                ", typeName='" + typeName + '\'' +
-                '}';
+        return new StringJoiner(", ", GoodsInfoVO.class.getSimpleName() + "[", "]")
+                .add("goodsId='" + goodsId + "'")
+                .add("goodsNumber=" + goodsNumber)
+                .add("goodsName='" + goodsName + "'")
+                .add("goodsBrand='" + goodsBrand + "'")
+                .add("sTypeId=" + sTypeId)
+                .add("goodsPic='" + goodsPic + "'")
+                .add("goodsEdition='" + goodsEdition + "'")
+                .add("businessId=" + businessId)
+                .add("goodsComment=" + goodsComment)
+                .add("goodsPrice='" + goodsPrice + "'")
+                .add("createTime=" + createTime)
+                .add("businessName='" + businessName + "'")
+                .add("isFlagship='" + isFlagship + "'")
+                .add("sTypeName='" + sTypeName + "'")
+                .add("typeName='" + typeName + "'")
+                .add("isAdvertising='" + isAdvertising + "'")
+                .toString();
     }
 }

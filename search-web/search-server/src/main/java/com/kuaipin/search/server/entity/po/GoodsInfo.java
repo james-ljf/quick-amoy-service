@@ -64,4 +64,6 @@ public class GoodsInfo implements Serializable {
 
     private Date updateTime;
 
+
+
 }

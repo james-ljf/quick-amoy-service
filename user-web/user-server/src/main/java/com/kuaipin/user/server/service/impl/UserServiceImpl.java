@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -44,9 +43,9 @@ public class UserServiceImpl implements UserService {
      */
     private static final String REG_KEY = "reg_verify:";
 
-    private static final ThreadPoolExecutor POOL_EXECUTOR = new ThreadPoolExecutor(30, 50,
+    private static final ThreadPoolExecutor POOL_EXECUTOR = new ThreadPoolExecutor(10, 20,
             1L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(30),
+            new LinkedBlockingQueue<>(20),
             new ThreadPoolExecutor.CallerRunsPolicy()
     );
 

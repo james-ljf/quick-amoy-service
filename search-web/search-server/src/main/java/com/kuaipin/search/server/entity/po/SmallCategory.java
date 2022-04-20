@@ -15,7 +15,6 @@ import java.util.Date;
 @Accessors(chain = true)
 public class SmallCategory implements Serializable {
 
-    private Long id;
 
     /**
      * 商品小品类id

@@ -6,7 +6,7 @@ package com.kuaipin.common.constants;
  */
 public enum SuccessEnum {
 
-    // 数据库操作称跟
+    // 数据库操作成功
     OPERATION_SUCCESS("操作成功"),
     // 发送验证码成功
     VERIFY_SUCCESS("发送成功");

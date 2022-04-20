@@ -46,8 +46,6 @@ public class SearchComponent {
     @Autowired
     private EntityCreation entityCreation;
 
-    private static final int MAX_EDITS = 2;
-
     /**
      * 根据关键词模糊搜索商品名称
      * @param keyword   关键词
@@ -57,7 +55,7 @@ public class SearchComponent {
         IndexReader reader = LuceneUtil.buildIndexReader();
         IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
         String key = IndexConstants.GOODS_NAME;
-        // 商品名模糊搜索，最大间距为2
+        // 商品名搜索
         Query query = new TermQuery(new Term(key, keyword));
         // 评论数降序
         Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false));

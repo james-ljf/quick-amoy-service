@@ -8,6 +8,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 /**
  * @Author: ljf
  * @DateTime: 2022/3/24 13:10
@@ -30,12 +32,13 @@ public class SystemTimeAspectj {
         Object result = point.proceed();
         long end = System.currentTimeMillis();
         MethodSignature signature = (MethodSignature) point.getSignature();
-
+        //获取原方法的参数
+        Object[] args = point.getArgs();
         //请求的方法名
         String className = point.getTarget().getClass().getName();
         String methodName = signature.getName();
-        log.debug("【接口执行时间】接口名：{}.{},执行时间:{}毫秒",className, methodName,(end-start));
-        log.info("【接口执行时间】接口名：{}.{},执行时间:{}毫秒",className, methodName,(end-start));
+        log.debug("【接口执行时间】接口名：{}.{}, 请求信息：{}\n 执行时间:{}毫秒",className, methodName, Arrays.toString(args), (end-start));
+        log.info("【接口执行时间】接口名：{}.{}, 请求信息：{}\n执行时间:{}毫秒",className, methodName, Arrays.toString(args), (end-start));
         return result;
     }
 

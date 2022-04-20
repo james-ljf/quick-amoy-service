@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-    private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
 
     @Autowired
     private RecommendComponent recommendComponent;
@@ -238,9 +238,9 @@ public class SearchServiceImpl implements SearchService {
             return Response.fail(Code.RESULT_NULL);
         }
         // 将结果放入map集合用于填坑位
-        Map<String, List<GoodsInfoVO>> listMap = new ConcurrentHashMap<>(6);
-        listMap.put(SearchConstants.G_NAME, goodsNameList);
-        listMap.put(SearchConstants.S_NAME, sTypeNameList);
+        Map<String, Iterator<GoodsInfoVO>> listMap = new ConcurrentHashMap<>(6);
+        listMap.put(SearchConstants.G_NAME, goodsNameList.iterator());
+        listMap.put(SearchConstants.S_NAME, sTypeNameList.iterator());
         List<GoodsInfoVO> goodsInfoVOList = pitPositionComponent.searchPitFilling(listMap, analyzerList);
         // 获取当前页商品
         Page<GoodsInfoVO> results = goodsInfoPage(goodsInfoVOList, pageDTO);
@@ -418,7 +418,9 @@ public class SearchServiceImpl implements SearchService {
         SearchRecordDTO searchRecordDTO = new SearchRecordDTO();
         searchRecordDTO.setSearchKeyword(keyword);
         searchRecordDTO.setUId(uId);
-        recordProcessService.increaseSearchRecord(searchRecordDTO);
+        int num = recordProcessService.increaseSearchRecord(searchRecordDTO);
+        log.info("插入了{}条搜索记录", num);
+
     }
 
     /**
@@ -446,6 +448,5 @@ public class SearchServiceImpl implements SearchService {
             RedisUtil.setList(SearchConstants.LOGIN_RECOMMEND_KEY, goodsInfoVO, time);
         }
     }
-
 
 }
