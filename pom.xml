@@ -9,11 +9,11 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>gateway-web</module>
         <module>admin-web</module>
         <module>platform-bom</module>
         <module>search-web</module>
         <module>user-web</module>
+        <module>gateway-service</module>
     </modules>
 
     <name>kuaipin-service</name>

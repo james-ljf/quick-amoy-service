@@ -1,0 +1,30 @@
+server:
+  port: 9030
+
+spring:
+  application:
+    name: admin-web
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-wz98x93362094wv12vo.mysql.rds.aliyuncs.com:3307/kuaipin_service?useSSL=false&useUnicode=true&characterEncoding=UTF8&autoReconnect=true
+    username: lijiefeng
+    password: Ljf123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com.kuaipin.search: debug

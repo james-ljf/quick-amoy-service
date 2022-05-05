@@ -1,5 +1,6 @@
 package com.kuaipin.search.server.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kuaipin.search.server.entity.po.SmallCategory;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class GoodsCategoryVO implements Serializable {
     /**
      * 大品类id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long typeId;
 
     /**

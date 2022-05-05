@@ -1,9 +1,11 @@
 package com.kuaipin.user.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * 用户信息
@@ -11,12 +13,12 @@ import java.util.Date;
  * @DateTime: 2021/12/13 14:03
  */
 @Data
-@Accessors(chain = true)
 public class User implements Serializable {
 
     /**
      * 用户id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long uId;
 
     /**
@@ -51,14 +53,14 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "uId=" + uId +
-                ", uEmail='" + uEmail + '\'' +
-                ", uPassword='" + uPassword + '\'' +
-                ", uNickname='" + uNickname + '\'' +
-                ", uSex='" + uSex + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
+        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+                .add("uId=" + uId)
+                .add("uEmail='" + uEmail + "'")
+                .add("uPassword='" + uPassword + "'")
+                .add("uNickname='" + uNickname + "'")
+                .add("uSex='" + uSex + "'")
+                .add("createTime=" + createTime)
+                .add("updateTime=" + updateTime)
+                .toString();
     }
 }

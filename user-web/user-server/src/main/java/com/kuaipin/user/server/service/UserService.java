@@ -3,6 +3,7 @@ package com.kuaipin.user.server.service;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.user.server.entity.request.UserRequest;
 import com.kuaipin.user.server.entity.response.UserLoginVO;
+import com.kuaipin.user.server.entity.response.UserVO;
 
 /**
  * 用户操作接口
@@ -32,5 +33,18 @@ public interface UserService {
      */
     UserLoginVO setUserLogin(UserRequest userRequest);
 
+    /**
+     * 获取用户信息
+     * @param uId  用户id
+     * @return  用户信息
+     */
+    UserVO userInfoPanel(Long uId);
+
+    /**
+     * 修改用户信息
+     * @param userRequest  新的用户信息
+     * @return  修改数量
+     */
+    int modifyUserInfo(UserRequest userRequest);
 
 }

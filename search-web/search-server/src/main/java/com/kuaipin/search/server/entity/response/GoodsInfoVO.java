@@ -1,5 +1,6 @@
 package com.kuaipin.search.server.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class GoodsInfoVO implements Serializable {
     /**
      * 编号（对外暴露）
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long goodsNumber;
 
     /**
@@ -55,6 +57,7 @@ public class GoodsInfoVO implements Serializable {
     /**
      * 商家id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long businessId;
 
     /**

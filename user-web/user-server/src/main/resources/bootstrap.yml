@@ -1,0 +1,58 @@
+server:
+  port: 9020
+
+spring:
+  application:
+    name: user-web
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-wz98x93362094wv12vo.mysql.rds.aliyuncs.com:3307/kuaipin_service?useSSL=false&useUnicode=true&characterEncoding=UTF8&autoReconnect=true
+    username: lijiefeng
+    password: Ljf123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  # html模板配置
+  thymeleaf:
+    cache: false
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    servlet:
+      content-type: text/html
+  mail:
+    host: smtp.163.com
+    username: 17687443422@163.com
+    password: RAZYLOFRFMQMYJNV
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 6000
+dubbo:
+  scan:
+    base-packages: com.kuaipin.user.server.service.dubbo
+  protocol:
+    name: dubbo
+    port: 20900
+  application:
+    qos-enable: false
+  registry:
+    address: nacos://127.0.0.1:8848
+  cloud:
+    subscribed-services: 'user-web'
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com.kuaipin.search: debug

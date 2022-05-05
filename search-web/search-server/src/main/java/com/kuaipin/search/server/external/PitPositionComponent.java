@@ -1,10 +1,7 @@
 package com.kuaipin.search.server.external;
 
-import com.kuaipin.common.annotation.SystemTime;
 import com.kuaipin.search.server.constants.SearchConstants;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +21,6 @@ public class PitPositionComponent {
      * @param analyzerList  顺位替补商品集合
      * @return  填坑完成的商品列表
      */
-    @SystemTime
     public List<GoodsInfoVO> searchPitFilling(Map<String, Iterator<GoodsInfoVO>> listMap, List<GoodsInfoVO> analyzerList){
         // 存放填坑最终结果
         List<GoodsInfoVO> filledList = new ArrayList<>();
@@ -66,6 +62,7 @@ public class PitPositionComponent {
         Set<GoodsInfoVO> allGoodsSet = new HashSet<>();
         allGoodsSet.addAll(IteratorUtils.toList(listMap.get(SearchConstants.G_NAME)));
         allGoodsSet.addAll(IteratorUtils.toList(listMap.get(SearchConstants.S_NAME)));
+        allGoodsSet.addAll(analyzerList);
         // 将已填坑的商品在set中删除，防止后面的商品与已填坑的商品重复
         filledList.forEach(allGoodsSet::remove);
         filledList.addAll(allGoodsSet);

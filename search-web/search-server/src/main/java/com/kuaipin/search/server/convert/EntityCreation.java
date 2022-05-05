@@ -1,6 +1,8 @@
 package com.kuaipin.search.server.convert;
 
 import com.kuaipin.search.server.constants.IndexConstants;
+import com.kuaipin.search.server.entity.po.Carousel;
+import com.kuaipin.search.server.entity.response.CarouselVO;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.util.LuceneUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,9 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +70,7 @@ public class EntityCreation {
      * @param key   对应的key
      * @return  高亮商品列表结果
      */
-    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, String key, String keyword) throws ParseException, IOException, InvalidTokenOffsetsException {
+    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, String key, String keyword) throws ParseException, IOException {
         List<GoodsInfoVO> goodsInfoVOList = new ArrayList<>();
         for (ScoreDoc topDoc : topDocs.scoreDocs) {
             Document document = searcher.doc(topDoc.doc);
@@ -95,6 +100,22 @@ public class EntityCreation {
             goodsInfoVOList.add(goodsInfoVO);
         }
         return goodsInfoVOList;
+    }
+
+    /**
+     * 热推商品类转换
+     * @param carousel  热推商品实体
+     * @return  VO
+     */
+    public CarouselVO carouselConvertVO(Carousel carousel){
+        CarouselVO carouselVO = new CarouselVO();
+        carouselVO.setCarouselId(carousel.getCarouselId());
+        carouselVO.setGoodsName(carousel.getGoodsName());
+        carouselVO.setGoodsNumber(carousel.getGoodsNumber());
+        carouselVO.setGoodsPic(carousel.getGoodsPic());
+        carouselVO.setCreateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(carousel.getCreateTime()), ZoneId.systemDefault()));
+        carouselVO.setUpdateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(carousel.getUpdateTime()), ZoneId.systemDefault()));
+        return carouselVO;
     }
 
 }

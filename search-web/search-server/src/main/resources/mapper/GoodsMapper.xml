@@ -26,4 +26,25 @@
         FROM `goods_big_category` AS gb
         LEFT JOIN goods_small_category AS gs ON gb.type_id = gs.b_type_id
     </select>
+
+
+    <insert id="insertSmallCategory">
+        INSERT INTO goods_small_category (s_type_id, s_type_name, b_type_id, create_time, update_time)
+        VALUES(#{sc.sTypeId}, #{sc.sTypeName}, #{sc.bTypeId}, #{sc.createTime}, #{sc.updateTime})
+    </insert>
+
+    <insert id="insertCarouselGoods">
+        INSERT INTO admin_carousel (carousel_id, goods_number, goods_name, goods_pic, create_time, update_time)
+        VALUES(#{cg.carouselId}, #{cg.goodsNumber}, #{cg.goodsName}, #{cg.goodsPic}, #{cg.createTime}, #{cg.updateTime})
+    </insert>
+
+    <delete id="delCarouselGoods">
+        DELETE FROM admin_carousel WHERE carousel_id = #{carouselId}
+    </delete>
+
+    <select id="getCarouselGoods" resultType="com.kuaipin.search.server.entity.po.Carousel">
+        SELECT carousel_id, goods_number, goods_name, goods_pic, create_time, update_time
+        FROM admin_carousel
+    </select>
+
 </mapper>

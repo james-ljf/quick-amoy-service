@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * 浏览记录DTO
@@ -33,6 +34,11 @@ public class BrowseRecordDTO implements Serializable {
     private String goodsName;
 
     /**
+     * 商品图片
+     */
+    private String goodsPic;
+
+    /**
      * 商品小品类id
      */
     private Long sTypeId;
@@ -47,17 +53,16 @@ public class BrowseRecordDTO implements Serializable {
      */
     private Date createTime;
 
-
     @Override
     public String toString() {
-        return "BrowseRecord{" +
-                "browseId=" + browseId +
-                ", goodsNumber='" + goodsNumber + '\'' +
-                ", goodsName='" + goodsName + '\'' +
-                ", sTypeId=" + sTypeId +
-                ", uId=" + uId +
-                ", createTime=" + createTime +
-                '}';
+        return new StringJoiner(", ", BrowseRecordDTO.class.getSimpleName() + "[", "]")
+                .add("browseId=" + browseId)
+                .add("goodsNumber=" + goodsNumber)
+                .add("goodsName='" + goodsName + "'")
+                .add("goodsPic='" + goodsPic + "'")
+                .add("sTypeId=" + sTypeId)
+                .add("uId=" + uId)
+                .add("createTime=" + createTime)
+                .toString();
     }
-
 }

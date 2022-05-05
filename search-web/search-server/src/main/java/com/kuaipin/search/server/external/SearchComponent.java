@@ -1,7 +1,6 @@
 package com.kuaipin.search.server.external;
 
 import com.huaban.analysis.jieba.JiebaSegmenter;
-import com.kuaipin.common.annotation.SystemTime;
 import com.kuaipin.common.constants.ErrorEnum;
 import com.kuaipin.search.server.constants.IndexConstants;
 import com.kuaipin.search.server.constants.SearchConstants;
@@ -9,19 +8,9 @@ import com.kuaipin.search.server.convert.EntityCreation;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.util.BoolQueryBuilders;
 import com.kuaipin.search.server.util.LuceneUtil;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
-import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.lionsoul.jcseg.ISegment;
-import org.lionsoul.jcseg.analyzer.JcsegAnalyzer;
-import org.lionsoul.jcseg.dic.ADictionary;
-import org.lionsoul.jcseg.dic.DictionaryFactory;
-import org.lionsoul.jcseg.segmenter.SegmenterConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +27,15 @@ import java.util.List;
  * @DateTime: 2022/4/5 15:49
  */
 @Component
-@SystemTime
 public class SearchComponent {
 
     private final Logger log = LoggerFactory.getLogger(SearchComponent.class);
 
-    @Autowired
     private EntityCreation entityCreation;
+    @Autowired
+    private void setEntityCreation(EntityCreation entityCreation){
+        this.entityCreation = entityCreation;
+    }
 
     /**
      * 根据关键词模糊搜索商品名称
@@ -52,11 +43,10 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> goodsNameRecall(String keyword){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         String key = IndexConstants.GOODS_NAME;
         // 商品名搜索
-        Query query = new TermQuery(new Term(key, keyword));
+        Query query = new FuzzyQuery(new Term(key, keyword), 1);
         // 评论数降序
         Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false));
         try{
@@ -74,8 +64,7 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> businessNameRecall(String keyword){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 商家名称模糊搜索
         Query query = new TermQuery(new Term(IndexConstants.BUSINESS_NAME, keyword));
         // 评论数降序
@@ -95,8 +84,7 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> sTypeNameOrBrandRecall(String keyword){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 构造搜索条件
         BoolQueryBuilders builders = new BoolQueryBuilders();
         builders.should(new TermQuery(new Term(IndexConstants.S_TYPE_NAME, keyword)));
@@ -117,8 +105,7 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> analyzerKeywordGoods(String keyword){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         String key = IndexConstants.GOODS_NAME;
         // 对关键词分词
         JiebaSegmenter jiebaSegmenter = new JiebaSegmenter();
@@ -146,8 +133,7 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> smallTypeGoodsPanel(String typeName){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         String key = IndexConstants.S_TYPE_NAME;
         Query query = new TermQuery(new Term(key, typeName));
         int size = SearchConstants.SEARCH_SIZE;
@@ -166,8 +152,7 @@ public class SearchComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> bigTypeGoodsPanel(String typeName){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         Query query = new TermQuery(new Term(IndexConstants.TYPE_NAME, typeName));
         int size = SearchConstants.SEARCH_SIZE;
         try{

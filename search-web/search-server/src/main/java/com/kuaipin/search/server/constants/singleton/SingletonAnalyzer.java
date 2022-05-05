@@ -10,7 +10,7 @@ import org.apache.lucene.analysis.Analyzer;
  */
 public class SingletonAnalyzer {
 
-    public SingletonAnalyzer(){
+    private SingletonAnalyzer(){
 
     }
 

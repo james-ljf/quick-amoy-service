@@ -16,11 +16,12 @@ public interface RecordProcessService {
 
     /**
      * 查询所有搜索记录
+     * @param uId  用户id
      * @param pageDTO   分页请求体
      * @return  搜索记录列表
      */
     @CallableAPI(desc = "查询所有搜索记录")
-    Page<SearchRecordDTO> allSearchRecord(PageDTO pageDTO);
+    Page<SearchRecordDTO> allSearchRecord(Long uId, PageDTO pageDTO);
 
     /**
      * 用于查询用户的搜索历史

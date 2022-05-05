@@ -31,6 +31,11 @@ public class SearchRecord implements Serializable {
     private String searchExtend;
 
     /**
+     * 是否有结果
+     */
+    private String isResult;
+
+    /**
      * 用户id
      */
     private Long uId;

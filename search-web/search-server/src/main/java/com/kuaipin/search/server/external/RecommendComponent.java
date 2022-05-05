@@ -36,8 +36,11 @@ public class RecommendComponent {
 
     private final Logger log = LoggerFactory.getLogger(RecommendComponent.class);
 
-    @Autowired
     private EntityCreation entityCreation;
+    @Autowired
+    private void setEntityCreation(EntityCreation entityCreation){
+        this.entityCreation = entityCreation;
+    }
 
     @DubboReference
     private RecordProcessService recordProcessService;
@@ -104,9 +107,9 @@ public class RecommendComponent {
             builders.mustNotAll(notExistList);
         }
         BooleanQuery query = builders.build();
-        // 排序规则(按创建时间和商品评论数降序排序)
-        Sort sort = new Sort(new SortField(IndexConstants.CREATE_TIME, SortField.Type.STRING, false),
-                new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.DOC, false));
+        // 排序规则(按商品评论数降序排序)
+        Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false),
+                new SortField(IndexConstants.GOODS_PRICE, SortField.Type.INT, true));
         // 召回数量
         int number = (Integer) RecommendRuleConstants.NOT_LOGIN_RECALL_NUMBER.getType();
         try{

@@ -35,12 +35,12 @@ public class RecordProcessServiceImpl implements RecordProcessService {
     private RecordService recordService;
 
     @Override
-    public Page<SearchRecordDTO> allSearchRecord(PageDTO pageDTO) {
+    public Page<SearchRecordDTO> allSearchRecord(Long uId, PageDTO pageDTO) {
         log.info("[2201.allSearchRecord rpc api]: req = {}", pageDTO);
         // 查询所有搜索记录
-        Page<SearchRecord> searchRecordPage = recordService.allSearchRecord(pageDTO);
+        Page<SearchRecord> searchRecordPage = recordService.allSearchRecord(uId, pageDTO);
         Page<SearchRecordDTO> result = pageConvert.convertSearchRecordToDTO(searchRecordPage);
-        log.info("[2301.allSearchRecord success]: result = {}", result);
+        log.info("[2201.allSearchRecord success]: result = {}", result);
         return result;
     }
 
@@ -48,8 +48,8 @@ public class RecordProcessServiceImpl implements RecordProcessService {
     public List<SearchRecordDTO> latelySearchHistory(Long uId, Integer size) {
         log.info("[2202.latelySearchHistory rpc api]: req = {}, {}", uId, size);
         List<SearchRecord> searchRecordList = recordService.latelySearchRecord(uId, size);
-        List<SearchRecordDTO> result = ObjectUtil.objToList(searchRecordList, SearchRecordDTO.class);
-        log.info("[2302.latelySearchHistory success]: result = {}", result);
+        List<SearchRecordDTO> result = ObjectUtil.copyList(searchRecordList, SearchRecordDTO::new);
+        log.info("[2202.latelySearchHistory success]: result = {}", result);
         return result;
     }
 
@@ -57,8 +57,8 @@ public class RecordProcessServiceImpl implements RecordProcessService {
     public List<BrowseRecordDTO> latelyBrowseRecord(Long uId, Integer size) {
         log.info("[2203.latelyBrowseRecord rpc api]: req = {}, {}", uId, size);
         List<BrowseRecord> browseRecordList = recordService.latelyBrowseRecord(uId, size);
-        List<BrowseRecordDTO> result = ObjectUtil.objToList(browseRecordList, BrowseRecordDTO.class);
-        log.info("[2303.latelyBrowseRecord success]: result = {}", result);
+        List<BrowseRecordDTO> result = ObjectUtil.copyList(browseRecordList, BrowseRecordDTO::new);
+        log.info("[2203.latelyBrowseRecord success]: result = {}", result);
         return result;
     }
 

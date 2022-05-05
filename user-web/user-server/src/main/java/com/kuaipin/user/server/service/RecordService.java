@@ -7,8 +7,10 @@ import com.kuaipin.user.api.entity.BrowseRecordDTO;
 import com.kuaipin.user.api.entity.SearchRecordDTO;
 import com.kuaipin.user.server.entity.po.BrowseRecord;
 import com.kuaipin.user.server.entity.po.SearchRecord;
+import com.kuaipin.user.server.entity.request.BrowseRecordRequest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 对搜索记录的操作接口
@@ -19,10 +21,11 @@ public interface RecordService {
 
     /**
      * 查询所有搜索记录
+     * @param uId 用户id
      * @param pageDTO   分页请求体
-     * @return  搜索记录分页对象
+     * @return  当前页搜索记录
      */
-    Page<SearchRecord> allSearchRecord(PageDTO pageDTO);
+    Page<SearchRecord> allSearchRecord(Long uId, PageDTO pageDTO);
 
     /**
      * 查询用户的搜索历史
@@ -34,12 +37,27 @@ public interface RecordService {
     List<SearchRecord> latelySearchRecord(Long uId, Integer size);
 
     /**
-     * 查询用户的浏览记录
+     * 查询所有浏览记录
+     * @param uId  用户id
+     * @param pageDTO  分页请求体
+     * @return  当前页浏览记录
+     */
+    Page<BrowseRecord> allBrowseRecord(Long uId, PageDTO pageDTO);
+
+    /**
+     * 按数量查询用户的浏览记录
      * @param uId   用户id
      * @param size  查询的数量
      * @return  用户浏览记录列表
      */
     List<BrowseRecord> latelyBrowseRecord(Long uId, Integer size);
+
+    /**
+     * 获取用户的浏览记录
+     * @param uId  用户id
+     * @return  浏览记录列表
+     */
+    Map<String, List<BrowseRecord>> latelyBrowseRecord(Long uId);
 
     /**
      * 增加搜索记录
@@ -50,10 +68,10 @@ public interface RecordService {
 
     /**
      * 增加浏览记录
-     * @param browseRecordDTO   浏览级路
+     * @param request   浏览级路
      * @return  增加数量
      */
-    int increaseBrowseRecord(BrowseRecordDTO browseRecordDTO);
+    int increaseBrowseRecord(BrowseRecordRequest request);
 
     /**
      * 删除搜索记录

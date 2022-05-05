@@ -4,6 +4,7 @@ import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
 import com.kuaipin.common.entity.dto.PageDTO;
+import com.kuaipin.common.exception.BizBusinessException;
 import com.kuaipin.common.util.ObjectUtil;
 import com.kuaipin.common.util.RedisUtil;
 import com.kuaipin.common.constants.ErrorEnum;
@@ -38,6 +39,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,24 +54,31 @@ public class SearchServiceImpl implements SearchService {
 
     private final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
 
-    @Autowired
-    private RecommendComponent recommendComponent;
+    private final RecommendComponent recommendComponent;
 
-    @Autowired
-    private SearchComponent searchComponent;
+    private final SearchComponent searchComponent;
 
-    @Autowired
-    private CoverBottomComponent coverBottomComponent;
+    private final CoverBottomComponent coverBottomComponent;
 
-    @Autowired
-    private PitPositionComponent pitPositionComponent;
+    private final PitPositionComponent pitPositionComponent;
 
     @DubboReference
     private RecordProcessService recordProcessService;
 
-    private static final ThreadPoolExecutor execThreadPool = new ThreadPoolExecutor(50, 300,
+    @Autowired
+    public SearchServiceImpl(RecommendComponent recommendComponent,
+                             SearchComponent searchComponent,
+                             CoverBottomComponent coverBottomComponent,
+                             PitPositionComponent pitPositionComponent){
+        this.recommendComponent = recommendComponent;
+        this.searchComponent = searchComponent;
+        this.coverBottomComponent = coverBottomComponent;
+        this.pitPositionComponent = pitPositionComponent;
+    }
+
+    private static final ThreadPoolExecutor execThreadPool = new ThreadPoolExecutor(40, 80,
             1L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(50),
+            new LinkedBlockingQueue<>(40),
             new ThreadPoolExecutor.CallerRunsPolicy()
     );
 
@@ -80,7 +90,14 @@ public class SearchServiceImpl implements SearchService {
     /**
      * 默认推荐数量最低值
      */
-    private static final int DEFAULT_SIZE = 40;
+    private static final int DEFAULT_SIZE = 48;
+
+    /**
+     * 判断在做搜索结果分页时不需要执行添加搜索记录
+     */
+    private static final String FIRST_SEARCH = "1";
+
+    private static final Lock LOCK = new ReentrantLock();
 
     @Override
     public Response<Object> goodsRecommendPanel(Long uid) {
@@ -209,11 +226,11 @@ public class SearchServiceImpl implements SearchService {
             Page<GoodsInfoVO> results = goodsInfoPage(goodsInfoVOList, pageDTO);
             return Response.success(results);
         }
-        return Response.fail(Code.RESULT_NULL);
+        return Response.success(goodsInfoVOList);
     }
 
     @Override
-    public Response<Object> searchKeywordPanel(String keyword, Long uId, PageDTO pageDTO) {
+    public Response<Object> searchKeywordPanel(String keyword, Long uId, PageDTO pageDTO, String type) {
         // 召回数：商品名、商家名、小品类名
         Future<List<GoodsInfoVO>> goodsNameFuture = execThreadPool.submit(() -> searchComponent.goodsNameRecall(keyword));
         Future<List<GoodsInfoVO>> businessNameFuture = execThreadPool.submit(() -> searchComponent.businessNameRecall(keyword));
@@ -237,22 +254,38 @@ public class SearchServiceImpl implements SearchService {
             Thread.currentThread().interrupt();
             return Response.fail(Code.RESULT_NULL);
         }
-        // 将结果放入map集合用于填坑位
-        Map<String, Iterator<GoodsInfoVO>> listMap = new ConcurrentHashMap<>(6);
-        listMap.put(SearchConstants.G_NAME, goodsNameList.iterator());
-        listMap.put(SearchConstants.S_NAME, sTypeNameList.iterator());
-        List<GoodsInfoVO> goodsInfoVOList = pitPositionComponent.searchPitFilling(listMap, analyzerList);
-        // 获取当前页商品
-        Page<GoodsInfoVO> results = goodsInfoPage(goodsInfoVOList, pageDTO);
+        List<GoodsInfoVO> goodsInfoVOList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(goodsNameList) || CollectionUtils.isNotEmpty(sTypeNameList)){
+            // 将结果放入map集合用于填坑位
+            Map<String, Iterator<GoodsInfoVO>> listMap = new ConcurrentHashMap<>(6);
+            listMap.put(SearchConstants.G_NAME, goodsNameList.iterator());
+            listMap.put(SearchConstants.S_NAME, sTypeNameList.iterator());
+            goodsInfoVOList = pitPositionComponent.searchPitFilling(listMap, analyzerList);
+        }else{
+            // 不填坑位
+            goodsInfoVOList.addAll(goodsNameList);
+            goodsInfoVOList.addAll(sTypeNameList);
+            goodsInfoVOList.addAll(analyzerList);
+        }
+        // 存放本次搜索是否有结果
+        boolean isResult = false;
+        // 存放物理分页的最终结果
+        Page<GoodsInfoVO> results = new Page<>();
+        if (CollectionUtils.isNotEmpty(goodsInfoVOList)) {
+            // 获取当前页商品
+            results = goodsInfoPage(goodsInfoVOList, pageDTO);
+            isResult = true;
+        }
         // 获取相关商家
-        GoodsInfoVO businessVO;
-        if (CollectionUtils.isNotEmpty(businessNameList)){
+        GoodsInfoVO businessVO = null;
+        if (CollectionUtils.isNotEmpty(businessNameList)) {
             businessVO = businessNameList.get(0);
-        }else {
-            businessVO = goodsNameList.get(0);
         }
         // 添加搜索记录
-        execThreadPool.execute(() -> setSearchRecord(uId, keyword));
+        boolean finalIsResult = isResult;
+        if (FIRST_SEARCH.equals(type)){
+            execThreadPool.execute(() -> setSearchRecord(uId, keyword, finalIsResult));
+        }
         return Response.success(results, businessVO);
     }
 
@@ -285,6 +318,7 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * 取出搜索联想数组的推荐词段，用于搜索发现
+     *
      * @param lookupResultList 联想结果
      * @return 推荐词结果
      */
@@ -312,10 +346,11 @@ public class SearchServiceImpl implements SearchService {
     /**
      * 取出搜索联想数组的高亮推荐词段
      * 此方法运用了分词器处理推荐词
-     * @deprecated 处理复杂度过高，没达到api响应时间标准
+     *
      * @param lookupResultList 联想结果
      * @param keyword          关键词
      * @return 推荐词结果
+     * @deprecated 处理复杂度过高，没达到api响应时间标准
      */
     @Deprecated(since = "v1.1", forRemoval = false)
     public List<String> highKeyList(List<Lookup.LookupResult> lookupResultList, String keyword) throws IOException {
@@ -336,17 +371,17 @@ public class SearchServiceImpl implements SearchService {
                 List<String> keyPhrases = extractor.getKeywords(new StringReader(keyName));
                 boolean isBreak = false;
                 for (String keyPhrase : keyPhrases) {
-                    if (isBreak){
+                    if (isBreak) {
                         keyValue.append(keyPhrase);
                         break;
                     }
-                    if (keyPhrase.contains(keyword)){
+                    if (keyPhrase.contains(keyword)) {
                         keyValue.append(keyPhrase);
                         isBreak = true;
                     }
                 }
                 results.add(keyValue.toString());
-            }else {
+            } else {
                 results.add(keyName);
             }
         }
@@ -374,6 +409,8 @@ public class SearchServiceImpl implements SearchService {
                     Matcher matcher = PATTERN.matcher(highStr);
                     if (matcher.find()) {
                         key = highStr;
+                        key = key.replace("<b>", "");
+                        key = key.replace("</b>", "");
                         break;
                     }
                 }
@@ -381,7 +418,7 @@ public class SearchServiceImpl implements SearchService {
                 continue;
             }
             // 获取高亮的key
-            results.add(highKey);
+            results.add((String) result.key);
         }
         return results;
     }
@@ -399,28 +436,49 @@ public class SearchServiceImpl implements SearchService {
         int pageSize = pageDTO.getPageSize();
         int start = (pageNum - 1) * pageSize;
         int end = pageSize + start;
-        // 获取当前页的商品列表
-        List<GoodsInfoVO> result = new ArrayList<>();
-        for (int i = start; i < end; i++) {
-            result.add(goodsInfoVOList.get(i));
+        int length = goodsInfoVOList.size();
+        if (end > length){
+            end = length;
         }
         // 总数
         long total = goodsInfoVOList.size();
-        return new Page<>(total, pageNum, pageSize, result);
+        if (goodsInfoVOList.size() >= SearchConstants.MIN_LIMIT){
+            // 获取当前页的商品列表
+            List<GoodsInfoVO> result = new ArrayList<>();
+            for (int i = start; i < end; i++) {
+                result.add(goodsInfoVOList.get(i));
+            }
+
+            return new Page<>(total, pageNum, pageSize, result);
+        }
+        return new Page<>(total, pageNum, pageSize, goodsInfoVOList);
+
     }
 
     /**
      * 将本次搜索记录添加到系统数据库
-     * @param uId   用户id
-     * @param keyword   关键词
+     *
+     * @param uId     用户id
+     * @param keyword 关键词
      */
-    public void setSearchRecord(Long uId, String keyword){
+    public void setSearchRecord(Long uId, String keyword, boolean isResult) {
         SearchRecordDTO searchRecordDTO = new SearchRecordDTO();
         searchRecordDTO.setSearchKeyword(keyword);
         searchRecordDTO.setUId(uId);
-        int num = recordProcessService.increaseSearchRecord(searchRecordDTO);
-        log.info("插入了{}条搜索记录", num);
-
+        searchRecordDTO.setIsResult(SearchConstants.NOT_RESULT);
+        if (isResult) {
+            searchRecordDTO.setIsResult(SearchConstants.HAS_RESULT);
+        }
+        int num;
+        LOCK.lock();
+        try{
+            num = recordProcessService.increaseSearchRecord(searchRecordDTO);
+        }catch (Exception e){
+            throw new BizBusinessException(e.getMessage());
+        }finally {
+            LOCK.unlock();
+        }
+        log.info("插入了{}条搜索记录,req = {}", num, searchRecordDTO);
     }
 
     /**

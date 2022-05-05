@@ -35,6 +35,12 @@ public interface SearchConstants {
     String IS_FLAGSHIP = "1";
 
     /**
+     * 搜索记录是否有结果
+     */
+    String HAS_RESULT = "有";
+    String NOT_RESULT = "无";
+
+    /**
      * 搜索联想显示的推荐词数量
      */
     int ASSOCIATIONAL_NUM = 7;
@@ -53,12 +59,12 @@ public interface SearchConstants {
      * 坑位逻辑业务常量
      */
     String G_NAME = "goods_name_list";
-
     String S_NAME = "s_type_name_list";
-
-    String BRAND = "goods_brand_list";
-
+    /**
+     * 坑位逻辑数组
+     */
     String[] MASK = new String[]{G_NAME, G_NAME, S_NAME, G_NAME, S_NAME, G_NAME, G_NAME, G_NAME, S_NAME, G_NAME};
 
+    int MIN_LIMIT = 40;
 
 }

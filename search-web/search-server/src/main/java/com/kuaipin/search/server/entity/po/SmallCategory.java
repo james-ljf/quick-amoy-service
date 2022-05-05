@@ -1,5 +1,6 @@
 package com.kuaipin.search.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,6 +20,7 @@ public class SmallCategory implements Serializable {
     /**
      * 商品小品类id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long sTypeId;
 
     /**

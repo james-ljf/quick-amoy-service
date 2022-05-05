@@ -16,10 +16,24 @@ public interface UserRepository {
     User findUserInfo(String email);
 
     /**
+     * 查询用户信息
+     * @param uId  用户id
+     * @return  用户信息
+     */
+    User findUserInfo(Long uId);
+
+    /**
      * 插入用户信息
      * @param user  用户信息
      * @return  插入数量
      */
     int setUserInfo(User user);
+
+    /**
+     * 修改用户信息
+     * @param user  用户信息
+     * @return  修改数量
+     */
+    int changeUserInfo(User user);
 
 }
