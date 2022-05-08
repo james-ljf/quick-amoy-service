@@ -14,7 +14,6 @@ import java.util.Date;
 @Accessors(chain = true)
 public class BigCategory implements Serializable {
 
-    private Long id;
 
     /**
      * 商品大品类id

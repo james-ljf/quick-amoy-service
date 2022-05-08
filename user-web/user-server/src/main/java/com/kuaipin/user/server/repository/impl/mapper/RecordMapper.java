@@ -17,33 +17,49 @@ import java.util.List;
 public interface RecordMapper {
 
     /**
-     * 分页查询所有搜索记录
+     * 查询所有搜索记录
+     * @param uId  用户id
      * @return  搜索记录列表
      */
-    List<SearchRecord> selectSearchRecordByPage();
+    List<SearchRecord> selectAllSearchRecord(@Param("uid") Long uId);
 
     /**
      * 按照创建时间查询搜索记录
-     * @param uid   用户id
+     * @param uId   用户id
      * @param size  数量
      * @return  搜索记录列表
      */
-    List<SearchRecord> selectSearchRecordByTime(@Param("uid") Long uid, @Param("size") Integer size);
+    List<SearchRecord> selectSearchRecordByTime(@Param("uid") Long uId, @Param("size") Integer size);
+
+    /**
+     * 按照关键词查询搜索记录
+     * @param keyword  关键词
+     * @param uId  用户id
+     * @return  搜索记录
+     */
+    SearchRecord selectSearchRecord(@Param("keyword") String keyword, @Param("uid") Long uId);
 
     /**
      * 根据关键词查询搜索记录
      * @param keyword   关键词
      * @return  搜索记录
      */
-    SearchRecord selectSearchRecordByKeyword(@Param("keyword") String keyword);
+    SearchRecord selectSearchRecordByKeyword(String keyword);
+
+    /**
+     * 查询所有浏览记录
+     * @param uId  用户id
+     * @return  浏览记录列表
+     */
+    List<BrowseRecord> selectAllBrowseRecord(@Param("uid") Long uId);
 
     /**
      * 按照用户id查询近期浏览记录
-     * @param uid   用户id
+     * @param uId   用户id
      * @param size  数量
      * @return  浏览记录列表
      */
-    List<BrowseRecord> selectBrowseRecordByUid(@Param("uid") Long uid, @Param("size") Integer size);
+    List<BrowseRecord> selectBrowseRecordByUid(@Param("uid") Long uId, @Param("size") Integer size);
 
     /**
      * 根据商品编号查询浏览记录
@@ -91,10 +107,31 @@ public interface RecordMapper {
     int deleteBrowseRecord(@Param("bid") Long browseId, @Param("uid") Long uId);
 
     /**
+     * 修改搜索祭礼
+     * @param searchRecord  搜索记录
+     * @return  修改数量
+     */
+    int updateSearchRecord(@Param("sr") SearchRecord searchRecord);
+
+    /**
      * 修改浏览记录
-     * @param browseRecord  浏览级路
+     * @param browseRecord  浏览记录
      * @return  修改数量
      */
     int updateBroseRecord(@Param("br") BrowseRecord browseRecord);
+
+    /**
+     * 查询近期浏览记录
+     * @param uId  用户id
+     * @return  浏览记录列表
+     */
+    List<BrowseRecord> selectNearBrowseRecord(@Param("uid") Long uId);
+
+    /**
+     * 查询更早之前的浏览记录
+     * @param uId  用户id
+     * @return  浏览记录列表
+     */
+    List<BrowseRecord> selectLaterBrowseRecord(@Param("uid") Long uId);
 
 }

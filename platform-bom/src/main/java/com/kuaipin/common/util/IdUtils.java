@@ -10,6 +10,8 @@ import cn.hutool.core.util.IdUtil;
  */
 public class IdUtils {
 
+    private IdUtils(){}
+
     /**
      * 生成类似mongodb的ObjectId，  数据库char(24)存储
      * @return  String
@@ -22,7 +24,7 @@ public class IdUtils {
      * 生成的是不带-的UUID
      * @return  String
      */
-    public static String simpleUUID() {
+    public static String simpleUuid() {
         return IdUtil.simpleUUID();
     }
 
@@ -30,7 +32,7 @@ public class IdUtils {
      * 生成的UUID是带-的字符串
      * @return  String
      */
-    public static String randomUUID() {
+    public static String randomUuid() {
         return IdUtil.randomUUID();
     }
 

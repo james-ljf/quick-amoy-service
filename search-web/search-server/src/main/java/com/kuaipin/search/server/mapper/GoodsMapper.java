@@ -1,9 +1,12 @@
 package com.kuaipin.search.server.mapper;
 
 
+import com.kuaipin.search.server.entity.po.Carousel;
+import com.kuaipin.search.server.entity.po.SmallCategory;
+import com.kuaipin.search.server.entity.response.GoodsCategoryVO;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,13 +17,55 @@ import java.util.List;
 @Mapper
 public interface GoodsMapper {
 
-    @Select("SELECT g.goods_id, g.goods_number, g.goods_name, g.goods_brand, g.s_type_id," +
-            " g.goods_pic, g.goods_edition, g.business_id, g.goods_comment, g.goods_price, g.create_time," +
-            " b.business_name, b.is_flagship, gs.s_type_name, gb.type_name " +
-            "FROM goods_info as g " +
-            "left join business_info as b on g.business_id = b.business_id  " +
-            "left join goods_small_category as gs on g.s_type_id = gs.s_type_id " +
-            "left join goods_big_category as gb on gs.b_type_id = gb.type_id")
+    /**
+     * 查询商品
+     *
+     * @return 商品列表
+     */
     List<GoodsInfoVO> findGoodsInfo();
+
+    /**
+     * 查询商品品类
+     *
+     * @return 商品品类列表
+     */
+    List<GoodsCategoryVO> getGoodsCategory();
+
+    /**
+     * 添加商品小品类
+     *
+     * @param smallCategory 商品小品类
+     * @return 添加
+     */
+    int insertSmallCategory(@Param("sc") SmallCategory smallCategory);
+
+    /**
+     * 添加热推商品
+     *
+     * @param carousel 热推商品信息
+     * @return 添加数量
+     */
+    int insertCarouselGoods(@Param("cg") Carousel carousel);
+
+    /**
+     * 删除热推商品
+     *
+     * @param carouselId 热推id
+     * @return 删除数量
+     */
+    int delCarouselGoods(Long carouselId);
+
+    /**
+     * 获取所有热推商品
+     * @return  热推商品列表
+     */
+    List<Carousel> getCarouselGoods();
+
+    /**
+     * 查询热推商品
+     * @param goodsNumber  商品编号
+     * @return  热推商品
+     */
+    Carousel findCarouselGoods(Long goodsNumber);
 
 }

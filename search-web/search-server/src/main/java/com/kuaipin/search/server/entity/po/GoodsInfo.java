@@ -15,8 +15,6 @@ import java.util.Date;
  */
 @Data
 @Accessors(chain = true)
-@AllArgsConstructor
-@NoArgsConstructor
 public class GoodsInfo implements Serializable {
 
     /**
@@ -63,5 +61,7 @@ public class GoodsInfo implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+
 
 }

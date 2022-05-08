@@ -33,11 +33,11 @@ public class TFIDFAnalyzer{
 
         if (stopWordSet == null) {
             stopWordSet = new HashSet<>();
-            loadStopWords(stopWordSet, this.getClass().getResourceAsStream("/stop_words.txt"));
+            loadStopWords(stopWordSet, this.getClass().getResourceAsStream("/words/stop_words.txt"));
         }
         if (idfMap == null) {
             idfMap = new HashMap<>();
-            loadIDFMap(idfMap, this.getClass().getResourceAsStream("/idf.txt"));
+            loadIDFMap(idfMap, this.getClass().getResourceAsStream("/words/idf.txt"));
         }
 
         Map<String, Double> tfMap = getTf(content);

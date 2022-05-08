@@ -6,6 +6,8 @@ import com.kuaipin.user.server.repository.impl.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @Author: ljf
  * @DateTime: 2022/4/13 14:27
@@ -13,8 +15,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    @Autowired
+
     private UserMapper dbUserProxy;
+    @Autowired
+    private void setDbUserProxy(UserMapper dbUserProxy){
+        this.dbUserProxy = dbUserProxy;
+    }
 
     @Override
     public User findUserInfo(String email) {
@@ -22,7 +28,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User findUserInfo(Long uId) {
+        return dbUserProxy.selectUserInfoByUid(uId);
+    }
+
+    @Override
     public int setUserInfo(User user) {
         return dbUserProxy.insertUser(user);
+    }
+
+    @Override
+    public int changeUserInfo(User user) {
+        return dbUserProxy.updateUser(user);
+    }
+
+    @Override
+    public List<User> findUserInfo() {
+        return dbUserProxy.selectUserList();
     }
 }

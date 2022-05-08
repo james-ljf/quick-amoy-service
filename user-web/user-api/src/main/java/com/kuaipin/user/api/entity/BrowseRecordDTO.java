@@ -1,11 +1,10 @@
 package com.kuaipin.user.api.entity;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.StringJoiner;
 
 /**
  * 浏览记录DTO
@@ -13,18 +12,18 @@ import java.util.Date;
  * @DateTime: 2022/4/2 20:43
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class BrowseRecordDTO implements Serializable {
+public class BrowseRecordDTO {
 
     /**
      * 浏览记录id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long browseId;
 
     /**
-     * 商品id
+     * 商品编号
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long goodsNumber;
 
     /**
@@ -33,13 +32,20 @@ public class BrowseRecordDTO implements Serializable {
     private String goodsName;
 
     /**
+     * 商品图片
+     */
+    private String goodsPic;
+
+    /**
      * 商品小品类id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long sTypeId;
 
     /**
      * 用户id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long uId;
 
     /**
@@ -47,17 +53,21 @@ public class BrowseRecordDTO implements Serializable {
      */
     private Date createTime;
 
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 
     @Override
     public String toString() {
-        return "BrowseRecord{" +
-                "browseId=" + browseId +
-                ", goodsNumber='" + goodsNumber + '\'' +
-                ", goodsName='" + goodsName + '\'' +
-                ", sTypeId=" + sTypeId +
-                ", uId=" + uId +
-                ", createTime=" + createTime +
-                '}';
+        return new StringJoiner(", ", BrowseRecordDTO.class.getSimpleName() + "[", "]")
+                .add("browseId=" + browseId)
+                .add("goodsNumber=" + goodsNumber)
+                .add("goodsName='" + goodsName + "'")
+                .add("goodsPic='" + goodsPic + "'")
+                .add("sTypeId=" + sTypeId)
+                .add("uId=" + uId)
+                .add("createTime=" + createTime)
+                .toString();
     }
-
 }

@@ -15,7 +15,7 @@ dubbo:
   registry:
     address: nacos://127.0.0.1:8848
   cloud:
-    subscribed-services: 'user-web'
+    subscribed-services: 'search-web'
 
 pagehelper:
   helperDialect: mysql

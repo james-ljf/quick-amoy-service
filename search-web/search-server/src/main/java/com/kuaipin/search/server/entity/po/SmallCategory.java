@@ -1,7 +1,7 @@
 package com.kuaipin.search.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,14 +12,12 @@ import java.util.Date;
  * @DateTime: 2021/12/18 13:05
  */
 @Data
-@Accessors(chain = true)
 public class SmallCategory implements Serializable {
-
-    private Long id;
 
     /**
      * 商品小品类id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long sTypeId;
 
     /**

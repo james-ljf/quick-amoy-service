@@ -29,6 +29,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler){
         if (handler instanceof HandlerMethod){
+            log.info("进入接口限流器........");
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             if (!method.isAnnotationPresent(AccessLimit.class)){
@@ -54,7 +55,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             }else {
                 throw new BizBusinessException("请求频繁，请稍后再试。");
             }
-            log.info("进入接口限流拦截器，当前接口方法:{}，在{}时间段内已请求了{}次", method, sec, maxLimit);
+            log.info("当前接口方法:{}，在{}时间段内已请求了{}次", method, sec, maxLimit);
         }
         return true;
     }

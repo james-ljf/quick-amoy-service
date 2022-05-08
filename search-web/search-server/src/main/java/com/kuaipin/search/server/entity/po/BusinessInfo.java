@@ -1,5 +1,6 @@
 package com.kuaipin.search.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,11 +15,10 @@ import java.util.Date;
 @Accessors(chain = true)
 public class BusinessInfo implements Serializable {
 
-    private Long id;
-
     /**
      * 商家id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long businessId;
 
     /**

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuaipin.search.server.mapper.GoodsMapper">
+    <select id="findGoodsInfo" resultType="com.kuaipin.search.server.entity.response.GoodsInfoVO">
+        SELECT g.goods_id, g.goods_number, g.goods_name, g.goods_brand, g.s_type_id, g.goods_pic, g.goods_edition,
+        g.business_id, g.goods_comment, g.goods_price, g.create_time, b.business_name, b.is_flagship, gs.s_type_name, gb.type_name
+        FROM goods_info AS g
+        LEFT JOIN business_info AS b ON g.business_id = b.business_id
+        LEFT JOIN goods_small_category AS gs ON g.s_type_id = gs.s_type_id
+        LEFT JOIN goods_big_category AS gb ON gs.b_type_id = gb.type_id
+    </select>
+
+    <resultMap id="categoryMap" type="com.kuaipin.search.server.entity.response.GoodsCategoryVO">
+        <result column="type_id" property="typeId" />
+        <result column="type_name" property="typeName" />
+        <collection property="smallCategoryList" ofType="com.kuaipin.search.server.entity.po.SmallCategory">
+            <result column="s_type_id" property="sTypeId" />
+            <result column="s_type_name" property="sTypeName" />
+        </collection>
+    </resultMap>
+
+    <select id="getGoodsCategory" resultMap="categoryMap">
+        SELECT gb.type_id, gb.type_name, gs.s_type_id, gs.s_type_name
+        FROM `goods_big_category` AS gb
+        LEFT JOIN goods_small_category AS gs ON gb.type_id = gs.b_type_id
+    </select>
+
+
+    <insert id="insertSmallCategory">
+        INSERT INTO goods_small_category (s_type_id, s_type_name, b_type_id, create_time, update_time)
+        VALUES(#{sc.sTypeId}, #{sc.sTypeName}, #{sc.bTypeId}, #{sc.createTime}, #{sc.updateTime})
+    </insert>
+
+    <insert id="insertCarouselGoods">
+        INSERT INTO admin_carousel (carousel_id, goods_number, goods_name, goods_pic, create_time, update_time)
+        VALUES(#{cg.carouselId}, #{cg.goodsNumber}, #{cg.goodsName}, #{cg.goodsPic}, #{cg.createTime}, #{cg.updateTime})
+    </insert>
+
+    <delete id="delCarouselGoods">
+        DELETE FROM admin_carousel WHERE carousel_id = #{carouselId}
+    </delete>
+
+    <select id="getCarouselGoods" resultType="com.kuaipin.search.server.entity.po.Carousel">
+        SELECT carousel_id, goods_number, goods_name, goods_pic, create_time, update_time
+        FROM admin_carousel
+    </select>
+
+    <select id="findCarouselGoods" resultType="com.kuaipin.search.server.entity.po.Carousel">
+        SELECT carousel_id, goods_number, goods_name, goods_pic, create_time, update_time
+        FROM admin_carousel WHERE goods_number = #{goodsNumber}
+    </select>
+
+</mapper>

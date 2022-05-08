@@ -29,7 +29,7 @@ public class JwtUtils {
     /**
      * 加密/解密 密钥
      */
-    private static final String JWT_SECRET = "kuaipin-service";
+    private static final String JWT_SECRET = "HS256/MD5";
 
     /**
      * 创建JWT

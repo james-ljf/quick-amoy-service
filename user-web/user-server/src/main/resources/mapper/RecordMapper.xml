@@ -4,21 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuaipin.user.server.repository.impl.mapper.RecordMapper">
 
-    <select id="selectSearchRecordByPage" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
-        SELECT search_id, search_keyword, search_extend, u_id, create_time, update_time
-        FROM search_record AS sr
-        LEFT JOIN user_info AS u
-        ON sr.u_id = u.u_id
+    <select id="selectAllSearchRecord" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
+        SELECT search_id, search_keyword, search_extend, is_result, u_id, create_time, update_time
+        FROM search_record
         WHERE is_delete = 0
+        <if test="uid != null">
+            AND u_id = #{uid}
+        </if>
+        ORDER BY update_time DESC
     </select>
 
     <select id="selectSearchRecordByTime" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
-        SELECT search_id, search_keyword, search_extend
+        SELECT search_id, search_keyword, search_extend, is_result, create_time, update_time
         FROM search_record
-        ORDER BY create_time DESC LIMIT #{size}
-        WHERE is_delete = 0
+        WHERE is_delete = 0 AND is_result = '有'
         <if test="uid != null">
              AND u_id = #{uid}
+        </if>
+        ORDER BY update_time DESC LIMIT #{size}
+    </select>
+
+    <select id="selectSearchRecord" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
+        SELECT search_id, search_keyword, search_extend, is_result, u_id, create_time, update_time
+        FROM search_record
+        WHERE is_delete = 0 AND search_keyword = #{keyword}
+        <if test="uid != null">
+            AND u_id = #{uid}
         </if>
     </select>
 
@@ -28,51 +39,81 @@
         WHERE search_keyword = #{keyword} AND is_delete = 0
     </select>
 
-    <select id="selectBrowseRecordByUid" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
-        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time
+    <select id="selectAllBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
         FROM browse_record
-        ORDER BY create_time DESC LIMIT #{size}
+        WHERE is_delete = 0
+        <if test="uid != null">
+            AND u_id = #{uid}
+        </if>
+        ORDER BY update_time DESC
+    </select>
+
+    <select id="selectBrowseRecordByUid" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
+        FROM browse_record
         WHERE u_id = #{uid} AND is_delete = 0
+        ORDER BY update_time DESC LIMIT #{size}
     </select>
 
     <select id="selectBrowseRecordByGoodsNumber" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
-        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time, update_time
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
         FROM browse_record
         WHERE u_id = #{uid} AND goods_number = #{gNumber} AND is_delete = 0
     </select>
 
     <select id="selectBrowseRecordByPage" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
-        SELECT browse_id, goods_number, goods_name, s_type_id, u_id, create_time, update_time
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
         FROM browse_record
         WHERE u_id = #{uid} AND is_delete = 0
     </select>
 
     <insert id="insertSearchRecord">
-        INSERT INTO search_record ('search_id', 'search_keyword', 'search_extend', 'u_id', 'create_time', 'update_time')
-        VALUES(#{sr.searchId}, #{sr.searchKeyword}, #{sr.search_extend}, #{sr.uId}, #{sr.createTime}, #{sr.updateTime})
+        INSERT INTO search_record (search_id, search_keyword, is_result, u_id, create_time, update_time)
+        VALUES(#{sr.searchId}, #{sr.searchKeyword}, #{sr.isResult}, #{sr.uId}, #{sr.createTime}, #{sr.updateTime})
     </insert>
 
     <insert id="insertBrowseRecord">
-        INSERT INTO browse_record ('browse_id', 'goods_number', 'goods_name', 's_type_id', 'u_id', 'create_time', 'update_time')
-        VALUES(#{br.browseId}, #{br.goodsNumber}, #{br.goodsName}, #{br.sTypeId}, #{br.uId}, #{br.createTime}, #{br.updateTime})
+        INSERT INTO browse_record (browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time)
+        VALUES(#{br.browseId}, #{br.goodsNumber}, #{br.goodsName}, #{br.goodsPic}, #{br.sTypeId}, #{br.uId}, #{br.createTime}, #{br.updateTime})
     </insert>
 
     <update id="deleteSearchRecord">
         UPDATE search_record
-        SET 'is_delete' = 1
-        WHERE 'search_id' = #{sid} AND 'u_id' = #{uid}
+        SET is_delete = 1
+        WHERE search_id = #{sid} AND u_id = #{uid}
     </update>
 
     <update id="deleteBrowseRecord">
         UPDATE browse_record
-        SET 'is_delete' = 1
-        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid}
+        SET is_delete = 1
+        WHERE browse_id = #{bid} AND u_id = #{uid}
+    </update>
+
+    <update id="updateSearchRecord">
+        UPDATE search_record
+        SET update_time = #{sr.updateTime}
+        WHERE search_id = #{sr.searchId} AND is_delete = 0
     </update>
 
     <update id="updateBroseRecord">
         UPDATE browse_record
-        SET 'update_time' = #{br.updateTime}
-        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid} AND 'is_delete' = 0
+        SET update_time = #{br.updateTime}
+        WHERE browse_id = #{bid} AND u_id = #{uid} AND is_delete = 0
     </update>
+
+    <select id="selectNearBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
+        FROM browse_record
+        WHERE u_id = #{uid} AND is_delete = 0
+        AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= update_time
+    </select>
+
+    <select id="selectLaterBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
+        SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
+        FROM browse_record
+        WHERE u_id = #{uid} AND is_delete = 0
+        AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &gt;= update_time
+    </select>
 
 </mapper>

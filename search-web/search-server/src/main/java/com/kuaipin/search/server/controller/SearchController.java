@@ -2,10 +2,10 @@ package com.kuaipin.search.server.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kuaipin.common.annotation.Description;
-import com.kuaipin.common.annotation.SystemTime;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
 import com.kuaipin.common.entity.dto.PageDTO;
+import com.kuaipin.search.server.annotation.SystemTime;
 import com.kuaipin.search.server.service.SearchService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,13 +22,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = {"/pin"})
 public class SearchController {
 
-    @Autowired
     private SearchService searchService;
+    @Autowired
+    private void setSearchService(SearchService searchService){
+        this.searchService = searchService;
+    }
 
     @Description(value = "获取商品推荐列表")
     @GetMapping(value = {"/panel/recommend"})
     public Response<Object> goodsRecommendPanel(@RequestParam(value = "uid", required = false) Long uId) {
-        return searchService.goodsRecommendPanel(null);
+        return searchService.goodsRecommendPanel(uId);
     }
 
     @Description(value = "搜索联想")
@@ -51,11 +54,9 @@ public class SearchController {
         // 获取分页请求值
         int pageNum = object.getInteger("pageNum");
         int pageSize = object.getInteger("pageSize");
-        long total = object.getLong("total");
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNum(pageNum);
         pageDTO.setPageSize(pageSize);
-        pageDTO.setTotalCount(total);
         if (ObjectUtils.isEmpty(pageDTO)){
             return Response.fail(Code.ERROR_PARAMS);
         }
@@ -70,18 +71,17 @@ public class SearchController {
             return Response.fail(Code.ERROR_PARAMS);
         }
         Long uId = object.getLong("uid");
+        String type = object.getString("type");
         // 获取分页请求值
         int pageNum = object.getInteger("pageNum");
         int pageSize = object.getInteger("pageSize");
-        long total = object.getLong("total");
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNum(pageNum);
         pageDTO.setPageSize(pageSize);
-        pageDTO.setTotalCount(total);
         if (ObjectUtils.isEmpty(pageDTO)){
             return Response.fail(Code.ERROR_PARAMS);
         }
-        return searchService.searchKeywordPanel(keyword, uId, pageDTO);
+        return searchService.searchKeywordPanel(keyword, uId, pageDTO, type);
     }
 
     @Description(value = "搜索发现")

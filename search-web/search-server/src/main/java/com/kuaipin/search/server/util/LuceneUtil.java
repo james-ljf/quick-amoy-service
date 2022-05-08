@@ -57,7 +57,6 @@ public class LuceneUtil {
 
     public static AnalyzingInfixSuggester buildSuggester() {
         Directory directory = SingletonDirectory.buildRamDirectory();
-
         try {
             return new AnalyzingInfixSuggester(directory, SingletonAnalyzer.buildJcsegAnalyzer());
         } catch (IOException e) {
@@ -74,7 +73,7 @@ public class LuceneUtil {
     public static Analyzer buildAnalyzer(){
         SegmenterConfig config = new SegmenterConfig(true);
         ADictionary aDictionary = DictionaryFactory.createDefaultDictionary(config);
-        return new JcsegAnalyzer(ISegment.Type.MOST, config, aDictionary);
+        return new JcsegAnalyzer(ISegment.Type.NLP, config, aDictionary);
     }
 
     /**
@@ -99,6 +98,11 @@ public class LuceneUtil {
      */
     public static IndexSearcher buildIndexSearcher(IndexReader reader) {
         return new IndexSearcher(reader);
+    }
+
+    public static IndexSearcher buildIndexSearcher(){
+        IndexReader reader = LuceneUtil.buildIndexReader();
+        return LuceneUtil.buildIndexSearcher(reader);
     }
 
 

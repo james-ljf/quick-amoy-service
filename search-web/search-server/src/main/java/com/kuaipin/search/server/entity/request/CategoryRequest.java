@@ -2,6 +2,8 @@ package com.kuaipin.search.server.entity.request;
 
 import lombok.Data;
 
+import java.util.StringJoiner;
+
 /**
  * 商品品类请求体
  * @Author: ljf
@@ -22,9 +24,9 @@ public class CategoryRequest {
 
     @Override
     public String toString() {
-        return "SmallCategoryRequest{" +
-                "sTypeId=" + sTypeId +
-                ", sTypeName='" + sTypeName + '\'' +
-                '}';
+        return new StringJoiner(", ", CategoryRequest.class.getSimpleName() + "[", "]")
+                .add("sTypeId=" + sTypeId)
+                .add("sTypeName='" + sTypeName + "'")
+                .toString();
     }
 }

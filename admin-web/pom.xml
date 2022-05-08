@@ -2,19 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>kuaipin-service</artifactId>
         <groupId>com.kuaipin</groupId>
         <version>1.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
+    <description>后台管理服务</description>
     <artifactId>admin-web</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>admin-api</module>
-        <module>admin-server</module>
-    </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.kuaipin</groupId>
+            <artifactId>platform-bom</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kuaipin</groupId>
+            <artifactId>search-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kuaipin</groupId>
+            <artifactId>user-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

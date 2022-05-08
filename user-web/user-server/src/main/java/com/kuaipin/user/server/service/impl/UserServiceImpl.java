@@ -1,6 +1,7 @@
 package com.kuaipin.user.server.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.kuaipin.common.constants.ErrorEnum;
 import com.kuaipin.common.constants.SuccessEnum;
 import com.kuaipin.common.entity.Response;
@@ -11,7 +12,8 @@ import com.kuaipin.user.server.entity.Email;
 import com.kuaipin.user.server.entity.po.User;
 import com.kuaipin.user.server.entity.request.UserRequest;
 import com.kuaipin.user.server.entity.response.UserLoginVO;
-import com.kuaipin.user.server.external.EmailSender;
+import com.kuaipin.user.server.configuration.EmailSender;
+import com.kuaipin.user.server.entity.response.UserVO;
 import com.kuaipin.user.server.repository.UserRepository;
 import com.kuaipin.user.server.service.UserService;
 import org.apache.commons.lang3.ObjectUtils;
@@ -19,12 +21,13 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -44,17 +47,28 @@ public class UserServiceImpl implements UserService {
      */
     private static final String REG_KEY = "reg_verify:";
 
-    private static final ThreadPoolExecutor POOL_EXECUTOR = new ThreadPoolExecutor(30, 50,
+    /**
+     * token前置key
+     */
+    private static final String TOKEN_KEY = "u_id_";
+
+    private static final ThreadPoolExecutor POOL_EXECUTOR = new ThreadPoolExecutor(5, 10,
             1L, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(30),
+            new LinkedBlockingQueue<>(10),
             new ThreadPoolExecutor.CallerRunsPolicy()
     );
 
-    @Autowired
     private UserRepository userRepository;
-
     @Autowired
+    private void setUserRepository(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
     private EmailSender emailSender;
+    @Autowired
+    private void setEmailSender(EmailSender emailSender){
+        this.emailSender = emailSender;
+    }
 
     @Override
     public Response<Object> setEmailVerify(String email) {
@@ -72,6 +86,7 @@ public class UserServiceImpl implements UserService {
         emailInfo.setContent(regVerify);
         emailInfo.setTemplateName("RegisterTemplate.html");
         POOL_EXECUTOR.execute(() -> emailSender.sendHtmlEmail(emailInfo));
+        RedisUtil.set(REG_KEY + email, regVerify, 60L);
         return Response.success(SuccessEnum.VERIFY_SUCCESS);
     }
 
@@ -97,6 +112,7 @@ public class UserServiceImpl implements UserService {
         user.setUEmail(userRequest.getUEmail());
         user.setUPassword(SecureUtil.md5().digestHex16(userRequest.getUPassword()));
         user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
         user.setUNickname(user.getUEmail());
         int num = userRepository.setUserInfo(user);
         if (num == 0){
@@ -118,12 +134,40 @@ public class UserServiceImpl implements UserService {
         }
         // 密码正确登录成功，生成token，将用户id存到载荷中
         Map<String, Object> claimsMap = new HashMap<>(2);
-        long uId = userRequest.getUId();
+        long uId = user.getUId();
         claimsMap.put("uid", uId);
-        String userToken = JwtUtils.generateToken(claimsMap);
+        String userToken = JWTUtil.createToken(claimsMap, "1234".getBytes());
+        // 将token存入缓存
+        RedisUtil.set(TOKEN_KEY + uId, userToken, 60*60*24);
         UserLoginVO userLoginVO = new UserLoginVO();
         userLoginVO.setUId(uId);
         userLoginVO.setToken(userToken);
+        userLoginVO.setNickName(user.getUNickname());
         return userLoginVO;
     }
+
+    @Override
+    public UserVO userInfoPanel(Long uId) {
+        User user = userRepository.findUserInfo(uId);
+        if (ObjectUtils.isEmpty(user)){
+            return null;
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
+    }
+
+    @Override
+    public int modifyUserInfo(UserRequest userRequest) {
+        User user = new User();
+        BeanUtils.copyProperties(userRequest, user);
+        user.setUpdateTime(new Date());
+        return userRepository.changeUserInfo(user);
+    }
+
+    @Override
+    public List<User> getUserList() {
+        return userRepository.findUserInfo();
+    }
+
 }

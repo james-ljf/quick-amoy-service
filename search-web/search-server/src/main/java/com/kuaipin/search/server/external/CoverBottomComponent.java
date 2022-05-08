@@ -29,8 +29,11 @@ import java.util.List;
 @Component
 public class CoverBottomComponent {
 
-    @Autowired
     private EntityCreation entityCreation;
+    @Autowired
+    private void setEntityCreation(EntityCreation entityCreation){
+        this.entityCreation = entityCreation;
+    }
 
     /**
      * 推荐的兜底策略
@@ -40,8 +43,7 @@ public class CoverBottomComponent {
      * @return 商品文档 and 搜索器
      */
     public List<GoodsInfoVO> hotBottoming(List<GoodsInfoVO> goodsInfoVOList, int size){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 召回条件(评论数)
         int start = (int) RecommendRuleConstants.START_COMMENT_NUM.getType();
         int end = (int) RecommendRuleConstants.END_COMMENT_NUM.getType();

@@ -28,8 +28,8 @@ public class RecordRepositoryImpl implements RecordRepository {
     private RecordMapper dbSearchRecordProxy;
 
     @Override
-    public Page<SearchRecord> findAllSearchRecord() {
-        List<SearchRecord> searchRecordList = dbSearchRecordProxy.selectSearchRecordByPage();
+    public Page<SearchRecord> getAllSearchRecord(Long uId) {
+        List<SearchRecord> searchRecordList = dbSearchRecordProxy.selectAllSearchRecord(uId);
         if (CollectionUtils.isNotEmpty(searchRecordList)){
             // 将结果分页
             PageInfo<SearchRecord> pageInfo = new PageInfo<>(searchRecordList);
@@ -39,17 +39,32 @@ public class RecordRepositoryImpl implements RecordRepository {
     }
 
     @Override
-    public List<SearchRecord> findSearchRecordByTime(Long uid, Integer size) {
+    public List<SearchRecord> getSearchRecordByTime(Long uid, Integer size) {
         return dbSearchRecordProxy.selectSearchRecordByTime(uid, size);
     }
 
     @Override
-    public List<BrowseRecord> findBrowseRecordByUid(Long uid, Integer size) {
+    public SearchRecord getSearchRecord(String keyword, Long uId) {
+        return dbSearchRecordProxy.selectSearchRecord(keyword, uId);
+    }
+
+    @Override
+    public List<BrowseRecord> getBrowseRecordByUid(Long uid, Integer size) {
         return dbSearchRecordProxy.selectBrowseRecordByUid(uid, size);
     }
 
     @Override
-    public BrowseRecord findBrowseRecord(Long goodsNumber, Long uId) {
+    public Page<BrowseRecord> getAllBrowseRecord(Long uId) {
+        List<BrowseRecord> browseRecordList = dbSearchRecordProxy.selectAllBrowseRecord(uId);
+        if (CollectionUtils.isNotEmpty(browseRecordList)){
+            PageInfo<BrowseRecord> pageInfo = new PageInfo<>(browseRecordList);
+            return new Page<>(pageInfo.getTotal(), browseRecordList);
+        }
+        return null;
+    }
+
+    @Override
+    public BrowseRecord getBrowseRecord(Long goodsNumber, Long uId) {
         return dbSearchRecordProxy.selectBrowseRecordByGoodsNumber(goodsNumber, uId);
     }
 
@@ -69,6 +84,11 @@ public class RecordRepositoryImpl implements RecordRepository {
     }
 
     @Override
+    public int modifySearchRecord(SearchRecord searchRecord) {
+        return dbSearchRecordProxy.updateSearchRecord(searchRecord);
+    }
+
+    @Override
     public int modifyBrowseRecord(BrowseRecord browseRecord) {
         return dbSearchRecordProxy.updateBroseRecord(browseRecord);
     }
@@ -81,5 +101,15 @@ public class RecordRepositoryImpl implements RecordRepository {
     @Override
     public int cancelBrowseRecord(Long browseId, Long uId) {
         return dbSearchRecordProxy.deleteBrowseRecord(browseId, uId);
+    }
+
+    @Override
+    public List<BrowseRecord> findBrowseRecordInNear(Long uId) {
+        return dbSearchRecordProxy.selectNearBrowseRecord(uId);
+    }
+
+    @Override
+    public List<BrowseRecord> findBrowseRecordInLater(Long uId) {
+        return dbSearchRecordProxy.selectLaterBrowseRecord(uId);
     }
 }

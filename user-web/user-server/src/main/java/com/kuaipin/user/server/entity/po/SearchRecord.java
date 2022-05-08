@@ -1,5 +1,6 @@
 package com.kuaipin.user.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,6 +19,7 @@ public class SearchRecord implements Serializable {
     /**
      * 搜索记录id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long searchId;
 
     /**
@@ -31,8 +33,14 @@ public class SearchRecord implements Serializable {
     private String searchExtend;
 
     /**
+     * 是否有结果
+     */
+    private String isResult;
+
+    /**
      * 用户id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long uId;
 
     private Date createTime;

@@ -36,8 +36,11 @@ public class RecommendComponent {
 
     private final Logger log = LoggerFactory.getLogger(RecommendComponent.class);
 
-    @Autowired
     private EntityCreation entityCreation;
+    @Autowired
+    private void setEntityCreation(EntityCreation entityCreation){
+        this.entityCreation = entityCreation;
+    }
 
     @DubboReference
     private RecordProcessService recordProcessService;
@@ -96,7 +99,7 @@ public class RecommendComponent {
         // 将搜索记录的关键词添加到搜索条件中(“或”条件)
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
             // 条件：商品的名称或者商品的品牌含有关键字
-            builders.should(new TermQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
+            builders.should(new FuzzyQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword()), 1));
             builders.should(new TermQuery(new Term(IndexConstants.GOODS_BRAND, searchRecordDTO.getSearchKeyword())));
         }
         if (CollectionUtils.isNotEmpty(notExistList)){
@@ -104,9 +107,9 @@ public class RecommendComponent {
             builders.mustNotAll(notExistList);
         }
         BooleanQuery query = builders.build();
-        // 排序规则(按创建时间和商品评论数降序排序)
-        Sort sort = new Sort(new SortField(IndexConstants.CREATE_TIME, SortField.Type.STRING, false),
-                new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.DOC, false));
+        // 排序规则(按商品评论数降序排序)
+        Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false),
+                new SortField(IndexConstants.GOODS_PRICE, SortField.Type.INT, true));
         // 召回数量
         int number = (Integer) RecommendRuleConstants.NOT_LOGIN_RECALL_NUMBER.getType();
         try{
@@ -171,7 +174,7 @@ public class RecommendComponent {
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
             // 添加条件
-            builders.should(new TermQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
+            builders.should(new FuzzyQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
         }
         if (CollectionUtils.isNotEmpty(notExistList)){
             // 必要不存在条件

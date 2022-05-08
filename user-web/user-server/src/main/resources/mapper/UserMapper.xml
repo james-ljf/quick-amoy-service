@@ -5,14 +5,31 @@
 <mapper namespace="com.kuaipin.user.server.repository.impl.mapper.UserMapper">
 
     <select id="selectUserInfo" resultType="com.kuaipin.user.server.entity.po.User">
-        SELECT u_id, u_email
+        SELECT u_id, u_email, u_password, u_nickname, u_sex, create_time, update_time
         FROM user_info
-        WHERE u_email = #{email}
+        WHERE u_email = #{email} AND is_delete = 0
+    </select>
+
+    <select id="selectUserInfoByUid" resultType="com.kuaipin.user.server.entity.po.User">
+        SELECT u_id, u_email, u_nickname, u_sex, create_time, update_time
+        FROM user_info
+        WHERE u_id = #{uid} AND is_delete = 0
     </select>
 
     <insert id="insertUser">
-        INSERT INTO user_info ('u_id', 'u_email', 'u_password', 'u_nickname', 'u_sex', 'create_time', 'update_time')
-        VALUES(#{user.uId}, #{user.uEmail}, #{user.uPassword}, #{user.uNickname}, #{user.uSex}, #{user.createTime}, #{user.updateTime})
+        INSERT INTO user_info (u_id, u_email, u_password, u_nickname, create_time, update_time)
+        VALUES(#{user.uId}, #{user.uEmail}, #{user.uPassword}, #{user.uNickname}, #{user.createTime}, #{user.updateTime})
     </insert>
+
+    <update id="updateUser">
+        UPDATE user_info
+        SET u_nickname = #{user.uNickname}, u_sex = #{user.uSex}, update_time = #{user.updateTime}
+        WHERE u_id = #{user.uId}
+    </update>
+
+    <select id="selectUserList" resultType="com.kuaipin.user.server.entity.po.User">
+        SELECT u_id, u_email, u_nickname, u_sex, create_time, update_time
+        FROM user_info WHERE is_delete = 0
+    </select>
 
 </mapper>

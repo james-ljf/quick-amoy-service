@@ -38,10 +38,12 @@ public interface SearchService {
     /**
      * 输入的关键词分页搜索商品数据
      * @param keyword   关键词
+     * @param uId   用户id
      * @param pageDTO   分页请求体
+     * @param type  一个添加搜索记录的判断
      * @return  商品列表
      */
-    Response<Object> searchKeywordPanel(String keyword, Long uId, PageDTO pageDTO);
+    Response<Object> searchKeywordPanel(String keyword, Long uId, PageDTO pageDTO, String type);
 
     /**
      * 搜索发现
