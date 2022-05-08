@@ -6,6 +6,8 @@ import com.kuaipin.user.server.repository.impl.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @Author: ljf
  * @DateTime: 2022/4/13 14:27
@@ -38,5 +40,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public int changeUserInfo(User user) {
         return dbUserProxy.updateUser(user);
+    }
+
+    @Override
+    public List<User> findUserInfo() {
+        return dbUserProxy.selectUserList();
     }
 }

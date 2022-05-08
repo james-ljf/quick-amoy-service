@@ -1,9 +1,12 @@
 package com.kuaipin.user.server.service;
 
 import com.kuaipin.common.entity.Response;
+import com.kuaipin.user.server.entity.po.User;
 import com.kuaipin.user.server.entity.request.UserRequest;
 import com.kuaipin.user.server.entity.response.UserLoginVO;
 import com.kuaipin.user.server.entity.response.UserVO;
+
+import java.util.List;
 
 /**
  * 用户操作接口
@@ -46,5 +49,11 @@ public interface UserService {
      * @return  修改数量
      */
     int modifyUserInfo(UserRequest userRequest);
+
+    /**
+     * 获取系统所有用户
+     * @return  用户列表
+     */
+    List<User> getUserList();
 
 }

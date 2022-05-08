@@ -1,5 +1,6 @@
 package com.kuaipin.user.server.entity.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,18 +15,18 @@ import java.util.StringJoiner;
  * @DateTime: 2022/4/2 14:00
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class BrowseRecord implements Serializable {
 
     /**
      * 浏览记录id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long browseId;
 
     /**
      * 商品编号
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long goodsNumber;
 
     /**
@@ -41,11 +42,13 @@ public class BrowseRecord implements Serializable {
     /**
      * 商品小品类id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long sTypeId;
 
     /**
      * 用户id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long uId;
 
     /**

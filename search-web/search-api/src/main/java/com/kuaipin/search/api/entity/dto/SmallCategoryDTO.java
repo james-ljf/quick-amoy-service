@@ -1,18 +1,16 @@
-package com.kuaipin.search.server.entity.po;
+package com.kuaipin.search.api.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 商品品类分类
  * @Author: ljf
- * @DateTime: 2021/12/18 13:05
+ * @DateTime: 2022/5/7 10:27
  */
 @Data
-public class SmallCategory implements Serializable {
+public class SmallCategoryDTO {
 
     /**
      * 商品小品类id

@@ -26,7 +26,7 @@ public class UserController {
     /**
      * token前置key
      */
-    private static final String TOKEN_KEY = "u_id:";
+    private static final String TOKEN_KEY = "u_id_";
 
     private UserService userService;
     @Autowired
@@ -77,7 +77,7 @@ public class UserController {
     }
 
     @ApiDescription(desc = "获取用户信息面板")
-    @GetMapping(value = {"/kp/user"})
+    @GetMapping(value = {"/rel/user"})
     public Response<Object> userInfoPanel(@RequestParam("uid") Long uId){
         if (ObjectUtils.isEmpty(uId)){
             return Response.fail(Code.ERROR_PARAMS);
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @ApiDescription(desc = "修改用户信息")
-    @PostMapping(value = {"/kp/user"})
+    @PostMapping(value = {"/rel/user"})
     public Response<Object> changeUserInfo(@RequestBody UserRequest userRequest){
         if (ObjectUtils.isEmpty(userRequest)){
             return Response.fail(Code.ERROR_PARAMS);

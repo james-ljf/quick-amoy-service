@@ -13,7 +13,7 @@
     <select id="selectUserInfoByUid" resultType="com.kuaipin.user.server.entity.po.User">
         SELECT u_id, u_email, u_nickname, u_sex, create_time, update_time
         FROM user_info
-        WHERE u_email = #{uId} AND is_delete = 0
+        WHERE u_id = #{uid} AND is_delete = 0
     </select>
 
     <insert id="insertUser">
@@ -24,6 +24,12 @@
     <update id="updateUser">
         UPDATE user_info
         SET u_nickname = #{user.uNickname}, u_sex = #{user.uSex}, update_time = #{user.updateTime}
+        WHERE u_id = #{user.uId}
     </update>
+
+    <select id="selectUserList" resultType="com.kuaipin.user.server.entity.po.User">
+        SELECT u_id, u_email, u_nickname, u_sex, create_time, update_time
+        FROM user_info WHERE is_delete = 0
+    </select>
 
 </mapper>

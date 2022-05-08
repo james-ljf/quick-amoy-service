@@ -99,7 +99,7 @@ public class RecommendComponent {
         // 将搜索记录的关键词添加到搜索条件中(“或”条件)
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
             // 条件：商品的名称或者商品的品牌含有关键字
-            builders.should(new TermQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
+            builders.should(new FuzzyQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword()), 1));
             builders.should(new TermQuery(new Term(IndexConstants.GOODS_BRAND, searchRecordDTO.getSearchKeyword())));
         }
         if (CollectionUtils.isNotEmpty(notExistList)){
@@ -174,7 +174,7 @@ public class RecommendComponent {
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
             // 添加条件
-            builders.should(new TermQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
+            builders.should(new FuzzyQuery(new Term(IndexConstants.GOODS_NAME, searchRecordDTO.getSearchKeyword())));
         }
         if (CollectionUtils.isNotEmpty(notExistList)){
             // 必要不存在条件

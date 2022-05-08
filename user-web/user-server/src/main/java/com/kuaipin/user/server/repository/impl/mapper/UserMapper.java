@@ -4,6 +4,8 @@ import com.kuaipin.user.server.entity.po.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @Author: ljf
  * @DateTime: 2022/4/13 14:27
@@ -23,7 +25,7 @@ public interface UserMapper {
      * @param uId  用户id
      * @return  用户信息
      */
-    User selectUserInfoByUid(Long uId);
+    User selectUserInfoByUid(@Param("uid") Long uId);
 
     /**
      * 插入用户信息
@@ -37,7 +39,13 @@ public interface UserMapper {
      * @param user  用户信息
      * @return  修改数量
      */
-    int updateUser(User user);
+    int updateUser(@Param("user") User user);
+
+    /**
+     * 获取用户列表
+     * @return  用户列表
+     */
+    List<User> selectUserList();
 
 
 }

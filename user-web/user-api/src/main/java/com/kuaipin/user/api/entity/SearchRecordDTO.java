@@ -1,5 +1,6 @@
 package com.kuaipin.user.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class SearchRecordDTO implements Serializable {
     /**
      * 搜索记录id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long searchId;
     /**
      * 搜索关键字
@@ -38,6 +40,7 @@ public class SearchRecordDTO implements Serializable {
     /**
      * 用户id
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long uId;
 
     private Date createTime;

@@ -37,7 +37,7 @@ public interface RecordMapper {
      * @param uId  用户id
      * @return  搜索记录
      */
-    SearchRecord selectSearchRecord(String keyword, Long uId);
+    SearchRecord selectSearchRecord(@Param("keyword") String keyword, @Param("uid") Long uId);
 
     /**
      * 根据关键词查询搜索记录

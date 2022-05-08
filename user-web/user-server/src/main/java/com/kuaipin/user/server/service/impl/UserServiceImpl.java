@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -162,6 +163,11 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userRequest, user);
         user.setUpdateTime(new Date());
         return userRepository.changeUserInfo(user);
+    }
+
+    @Override
+    public List<User> getUserList() {
+        return userRepository.findUserInfo();
     }
 
 }

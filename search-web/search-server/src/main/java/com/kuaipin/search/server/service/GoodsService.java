@@ -2,6 +2,7 @@ package com.kuaipin.search.server.service;
 
 import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.dto.PageDTO;
+import com.kuaipin.search.api.entity.dto.CarouselRequestDTO;
 import com.kuaipin.search.server.entity.po.Carousel;
 import com.kuaipin.search.server.entity.po.SmallCategory;
 import com.kuaipin.search.server.entity.response.CarouselVO;
@@ -12,6 +13,9 @@ import java.util.List;
 
 /**
  * 商品操作
+ * //to-do
+ * 此类全部接口控制层应移动到admin-web服务，对外暴露供admin-web服务调用
+ *
  * @Author: ljf
  * @DateTime: 2022/4/20 13:38
  */
@@ -39,10 +43,10 @@ public interface GoodsService {
 
     /**
      * 设置热推商品
-     * @param carousel  热推商品信息
+     * @param requestDTO  热推商品信息
      * @return  设置数量
      */
-    int setGoodsCarousel(Carousel carousel);
+    int setGoodsCarousel(CarouselRequestDTO requestDTO);
 
     /**
      * 删除热推商品

@@ -5,6 +5,7 @@ import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.user.api.entity.BrowseRecordDTO;
 import com.kuaipin.user.api.entity.SearchRecordDTO;
+import com.kuaipin.user.api.entity.UserDTO;
 
 import java.util.List;
 
@@ -16,12 +17,19 @@ public interface RecordProcessService {
 
     /**
      * 查询所有搜索记录
-     * @param uId  用户id
      * @param pageDTO   分页请求体
      * @return  搜索记录列表
      */
     @CallableAPI(desc = "查询所有搜索记录")
-    Page<SearchRecordDTO> allSearchRecord(Long uId, PageDTO pageDTO);
+    Page<SearchRecordDTO> allSearchRecord(PageDTO pageDTO);
+
+    /**
+     * 查询所有浏览记录
+     * @param pageDTO  分页体
+     * @return  浏览记录列表
+     */
+    @CallableAPI(desc = "查询所有浏览记录")
+    Page<BrowseRecordDTO> allBrowseRecord(PageDTO pageDTO);
 
     /**
      * 用于查询用户的搜索历史
@@ -50,5 +58,11 @@ public interface RecordProcessService {
     @CallableAPI(desc = "增加搜索记录")
     int increaseSearchRecord(SearchRecordDTO searchRecordDTO);
 
+    /**
+     * 获取用户信息
+     * @return  用户列表
+     */
+    @CallableAPI(desc = "获取系统用户列表")
+    List<UserDTO> getUserList();
 
 }

@@ -43,7 +43,6 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         this.redisTemplate = redisTemplate;
     }
 
-//    private static final AntPathMatcher MATCHER = new AntPathMatcher();
 
     /**
      * token前置key

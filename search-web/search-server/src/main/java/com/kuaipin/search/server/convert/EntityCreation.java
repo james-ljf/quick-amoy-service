@@ -1,26 +1,23 @@
 package com.kuaipin.search.server.convert;
 
+import com.kuaipin.common.util.ObjectUtil;
+import com.kuaipin.search.api.entity.dto.GoodsCategoryDTO;
+import com.kuaipin.search.api.entity.dto.SmallCategoryDTO;
 import com.kuaipin.search.server.constants.IndexConstants;
 import com.kuaipin.search.server.entity.po.Carousel;
 import com.kuaipin.search.server.entity.response.CarouselVO;
+import com.kuaipin.search.server.entity.response.GoodsCategoryVO;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
-import com.kuaipin.search.server.util.LuceneUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -29,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 索引---实体类对应类
+ * 类构建器
  * @Author: ljf
  * @DateTime: 2022/3/22 17:06
  */
@@ -70,7 +67,7 @@ public class EntityCreation {
      * @param key   对应的key
      * @return  高亮商品列表结果
      */
-    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, String key, String keyword) throws ParseException, IOException {
+    public List<GoodsInfoVO> docConvertVoHigh(TopDocs topDocs, IndexSearcher searcher, String key, String keyword) throws ParseException, IOException, InvalidTokenOffsetsException {
         List<GoodsInfoVO> goodsInfoVOList = new ArrayList<>();
         for (ScoreDoc topDoc : topDocs.scoreDocs) {
             Document document = searcher.doc(topDoc.doc);
@@ -116,6 +113,20 @@ public class EntityCreation {
         carouselVO.setCreateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(carousel.getCreateTime()), ZoneId.systemDefault()));
         carouselVO.setUpdateTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(carousel.getUpdateTime()), ZoneId.systemDefault()));
         return carouselVO;
+    }
+
+    /**
+     * 商品品类中间转换类
+     * @param goodsCategoryVO  商品品类vo
+     * @return  dto
+     */
+    public GoodsCategoryDTO categoryConvert(GoodsCategoryVO goodsCategoryVO){
+        GoodsCategoryDTO categoryDTO = new GoodsCategoryDTO();
+        categoryDTO.setTypeId(goodsCategoryVO.getTypeId());
+        categoryDTO.setTypeName(goodsCategoryVO.getTypeName());
+        List<SmallCategoryDTO> smallCategoryList = ObjectUtil.copyList(goodsCategoryVO.getSmallCategoryList(), SmallCategoryDTO::new);
+        categoryDTO.setSmallCategoryDTOList(smallCategoryList);
+        return categoryDTO;
     }
 
 }

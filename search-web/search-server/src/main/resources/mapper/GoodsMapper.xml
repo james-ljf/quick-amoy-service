@@ -47,4 +47,9 @@
         FROM admin_carousel
     </select>
 
+    <select id="findCarouselGoods" resultType="com.kuaipin.search.server.entity.po.Carousel">
+        SELECT carousel_id, goods_number, goods_name, goods_pic, create_time, update_time
+        FROM admin_carousel WHERE goods_number = #{goodsNumber}
+    </select>
+
 </mapper>

@@ -1,16 +1,14 @@
 package com.kuaipin.user.server.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.kuaipin.common.annotation.ApiDescription;
 import com.kuaipin.common.constants.PubConstants;
-import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
-import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.user.server.entity.po.BrowseRecord;
 import com.kuaipin.user.server.entity.po.SearchRecord;
 import com.kuaipin.user.server.entity.request.BrowseRecordRequest;
 import com.kuaipin.user.server.service.RecordService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,43 +33,45 @@ public class RecordController {
         this.recordService = recordService;
     }
 
+    @ApiDescription(desc = "获取搜索记录")
     @PostMapping(value = {"/rel/ser/record"})
     public Response<Object> searchRecordPanel(@RequestBody JSONObject object){
-        if (ObjectUtils.isEmpty(object)){
+        if (ObjectUtils.isEmpty(object.get(PubConstants.UID))){
             return Response.fail(Code.ERROR_PARAMS);
         }
-        long uId = (long) object.get(PubConstants.UID);
+        long uId = object.getLong(PubConstants.UID);
         List<SearchRecord> resultList = recordService.latelySearchRecord(uId, 7);
         return Response.success(resultList);
     }
 
     @PostMapping(value = {"/rel/browse/record"})
     public Response<Object> browseRecordPanel(@RequestBody JSONObject object){
-        if (ObjectUtils.isEmpty(object)){
+        if (ObjectUtils.isEmpty(object.getLong(PubConstants.UID))){
             return Response.fail(Code.ERROR_PARAMS);
         }
-        long uId = (long) object.get(PubConstants.UID);
+        long uId = object.getLong(PubConstants.UID);
         Map<String, List<BrowseRecord>> resultMap = recordService.latelyBrowseRecord(uId);
         return Response.success(resultMap);
     }
 
     @PostMapping(value = {"/rel/del/ser/record"})
     public Response<Object> delSearchRecord(@RequestBody JSONObject object){
-        if (ObjectUtils.isEmpty(object)){
+        Long uId = object.getLong(PubConstants.UID);
+        Long searchId = object.getLong(PubConstants.SEARCH_ID);
+        if (ObjectUtils.isEmpty(uId) || ObjectUtils.isEmpty(searchId)){
             return Response.fail(Code.ERROR_PARAMS);
         }
-        long uId = (long) object.get(PubConstants.UID);
-        long searchId = (long) object.get(PubConstants.SEARCH_ID);
+
         return recordService.loseSearchRecord(searchId, uId);
     }
 
     @PostMapping(value = {"/rel/del/browse/record"})
     public Response<Object> delBrowseRecord(@RequestBody JSONObject object){
-        if (ObjectUtils.isEmpty(object)){
+        Long uId = object.getLong(PubConstants.UID);
+        Long browseId = object.getLong(PubConstants.BROWSE_ID);
+        if (ObjectUtils.isEmpty(uId) || ObjectUtils.isEmpty(browseId)){
             return Response.fail(Code.ERROR_PARAMS);
         }
-        long uId = (long) object.get(PubConstants.UID);
-        long browseId = (long) object.get(PubConstants.BROWSE_ID);
         return recordService.loseBrowseRecord(browseId, uId);
     }
 

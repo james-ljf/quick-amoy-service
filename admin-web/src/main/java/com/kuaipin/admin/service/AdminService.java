@@ -16,9 +16,4 @@ public interface AdminService {
      */
     AdminVO adminLogin(AdminRequest request);
 
-
-
-
-
-
 }

@@ -15,7 +15,7 @@
     </select>
 
     <select id="selectSearchRecordByTime" resultType="com.kuaipin.user.server.entity.po.SearchRecord">
-        SELECT search_id, search_keyword, search_extend
+        SELECT search_id, search_keyword, search_extend, is_result, create_time, update_time
         FROM search_record
         WHERE is_delete = 0 AND is_result = '有'
         <if test="uid != null">
@@ -80,14 +80,14 @@
 
     <update id="deleteSearchRecord">
         UPDATE search_record
-        SET 'is_delete' = 1
-        WHERE 'search_id' = #{sid} AND 'u_id' = #{uid}
+        SET is_delete = 1
+        WHERE search_id = #{sid} AND u_id = #{uid}
     </update>
 
     <update id="deleteBrowseRecord">
         UPDATE browse_record
-        SET 'is_delete' = 1
-        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid}
+        SET is_delete = 1
+        WHERE browse_id = #{bid} AND u_id = #{uid}
     </update>
 
     <update id="updateSearchRecord">
@@ -98,8 +98,8 @@
 
     <update id="updateBroseRecord">
         UPDATE browse_record
-        SET 'update_time' = #{br.updateTime}
-        WHERE 'browse_id' = #{bid} AND 'u_id' = #{uid} AND 'is_delete' = 0
+        SET update_time = #{br.updateTime}
+        WHERE browse_id = #{bid} AND u_id = #{uid} AND is_delete = 0
     </update>
 
     <select id="selectNearBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">

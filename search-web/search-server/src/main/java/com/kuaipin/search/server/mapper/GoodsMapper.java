@@ -61,4 +61,11 @@ public interface GoodsMapper {
      */
     List<Carousel> getCarouselGoods();
 
+    /**
+     * 查询热推商品
+     * @param goodsNumber  商品编号
+     * @return  热推商品
+     */
+    Carousel findCarouselGoods(Long goodsNumber);
+
 }

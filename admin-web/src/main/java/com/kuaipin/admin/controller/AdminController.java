@@ -1,17 +1,17 @@
 package com.kuaipin.admin.controller;
 
+import com.kuaipin.admin.entity.request.AdminRequest;
+import com.kuaipin.admin.entity.response.AdminVO;
+import com.kuaipin.admin.service.AdminService;
 import com.kuaipin.common.annotation.ApiDescription;
+import com.kuaipin.common.constants.SuccessEnum;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
-import com.kuaipin.common.entity.dto.PageDTO;
 import com.kuaipin.common.util.RedisUtil;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * @Author: ljf
@@ -21,16 +21,30 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @ApiDescription(desc = "获取api请求信息")
-    @PostMapping(value = {"/api/panel"})
-    public Response<Object> apiPanel(@RequestBody PageDTO pageDTO){
-        long start = (long) (pageDTO.getPageNum() - 1) * pageDTO.getPageSize();
-        long end = start + pageDTO.getPageSize();
-        List<Object> apiInfoList = RedisUtil.getList("api_info", start, end);
-        if (CollectionUtils.isEmpty(apiInfoList)){
-            return Response.fail(Code.RESULT_NULL);
+    private AdminService adminService;
+    @Autowired
+    private void setAdminService(AdminService adminService){
+        this.adminService = adminService;
+    }
+
+    @ApiDescription(desc = "管理员登录")
+    @PostMapping(value = {"/login"})
+    public Response<Object> setLoginStatus(@RequestBody AdminRequest request){
+        if (ObjectUtils.isEmpty(request)){
+            return Response.fail(Code.ERROR_PARAMS);
         }
-        return Response.success(apiInfoList);
+        AdminVO adminVO = adminService.adminLogin(request);
+        return Response.success(adminVO);
+    }
+
+    @ApiDescription(desc = "管理员退出登录")
+    @GetMapping(value = {"/rel/logout"})
+    public Response<Object> adminLogout(@RequestParam("adminId") Long adminId){
+        if (ObjectUtils.isEmpty(adminId)){
+            return Response.fail(Code.ERROR_PARAMS);
+        }
+        RedisUtil.del("u_id_" + adminId);
+        return Response.success(SuccessEnum.OPERATION_SUCCESS);
     }
 
 }

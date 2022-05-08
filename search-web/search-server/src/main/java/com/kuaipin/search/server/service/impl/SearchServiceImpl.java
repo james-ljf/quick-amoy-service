@@ -153,10 +153,13 @@ public class SearchServiceImpl implements SearchService {
             log.info("[2002.goodsRecommendPanel success] :  req = {}, res = {}", uid, result);
             return Response.success(result);
         }
-
         // 用户登录的情况（①获取用户近期的搜索记录，通过搜索记录关键词去召回同类商品；②获取用户近期的浏览记录，召回同类商品）
-        Future<List<GoodsInfoVO>> searchRecordFuture = execThreadPool.submit(() -> recommendComponent.searchRecordRecommend(uid, alreadyList));
-        Future<List<GoodsInfoVO>> browseRecordFuture = execThreadPool.submit(() -> recommendComponent.browseRecordRecommend(uid, alreadyList));
+        List<Object> objectList = RedisUtil.getList(SearchConstants.LOGIN_RECOMMEND_KEY, 0, -1);
+        // 泛型转换得到已经推荐过的商品集合
+        List<GoodsInfoVO> loginGoodsList = ObjectUtil.objToList(objectList, GoodsInfoVO.class);
+        // 召回
+        Future<List<GoodsInfoVO>> searchRecordFuture = execThreadPool.submit(() -> recommendComponent.searchRecordRecommend(uid, loginGoodsList));
+        Future<List<GoodsInfoVO>> browseRecordFuture = execThreadPool.submit(() -> recommendComponent.browseRecordRecommend(uid, loginGoodsList));
         List<GoodsInfoVO> searchList;
         List<GoodsInfoVO> browseList;
         try {
@@ -179,12 +182,11 @@ public class SearchServiceImpl implements SearchService {
         // 如果召回的数量没有达到最低推荐列表数量，就进行一路兜底召回
         if (goodsInfoVOList.size() < DEFAULT_SIZE) {
             int size = (int) RecommendRuleConstants.NOT_LOGIN_RECALL_NUMBER.getType();
-            List<GoodsInfoVO> hotList = coverBottomComponent.hotBottoming(alreadyList, size);
+            List<GoodsInfoVO> hotList = coverBottomComponent.hotBottoming(loginGoodsList, size);
             goodsInfoVOList.addAll(hotList);
         }
         List<GoodsInfoVO> result = goodsInfoVOList.stream()
                 .distinct()
-                .sorted(Comparator.comparingInt(GoodsInfoVO::getGoodsComment).reversed())
                 .collect(Collectors.toList());
         // 将本次推荐存入登录的推荐队列，防止刷新推荐出现重复
         execThreadPool.execute(() -> pushLoginResultToList(result));

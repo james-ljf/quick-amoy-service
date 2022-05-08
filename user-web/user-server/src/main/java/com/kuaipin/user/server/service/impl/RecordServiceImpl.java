@@ -106,7 +106,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public int increaseSearchRecord(SearchRecordDTO searchRecordDTO) {
         String keyword = searchRecordDTO.getSearchKeyword();
-        Long uId = searchRecordDTO.getUId();
+        long uId = searchRecordDTO.getUId();
         SearchRecord oldRecord = recordRepository.getSearchRecord(keyword, uId);
         if (ObjectUtils.isNotEmpty(oldRecord)){
             oldRecord.setUpdateTime(new Date());
@@ -134,6 +134,7 @@ public class RecordServiceImpl implements RecordService {
             BrowseRecord browseRecord = new BrowseRecord();
             // bean复制属性
             BeanUtils.copyProperties(request, browseRecord);
+            browseRecord.setBrowseId(IdUtils.snowflakeId());
             browseRecord.setUpdateTime(new Date());
             browseRecord.setCreateTime(new Date());
             num = recordRepository.setBrowseRecord(browseRecord);

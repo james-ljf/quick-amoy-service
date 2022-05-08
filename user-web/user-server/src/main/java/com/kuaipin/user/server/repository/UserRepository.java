@@ -2,6 +2,8 @@ package com.kuaipin.user.server.repository;
 
 import com.kuaipin.user.server.entity.po.User;
 
+import java.util.List;
+
 /**
  * @Author: ljf
  * @DateTime: 2022/4/13 14:26
@@ -35,5 +37,11 @@ public interface UserRepository {
      * @return  修改数量
      */
     int changeUserInfo(User user);
+
+    /**
+     * 获取用户
+     * @return  用户列表
+     */
+    List<User> findUserInfo();
 
 }

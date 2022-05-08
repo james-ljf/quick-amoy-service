@@ -2,8 +2,12 @@ package com.kuaipin.search.server.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
+import com.kuaipin.common.constants.ErrorEnum;
 import com.kuaipin.common.entity.Page;
+import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.PageDTO;
+import com.kuaipin.common.util.IdUtils;
+import com.kuaipin.search.api.entity.dto.CarouselRequestDTO;
 import com.kuaipin.search.server.convert.EntityCreation;
 import com.kuaipin.search.server.entity.po.Carousel;
 import com.kuaipin.search.server.entity.po.SmallCategory;
@@ -12,7 +16,10 @@ import com.kuaipin.search.server.entity.response.GoodsCategoryVO;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.mapper.GoodsMapper;
 import com.kuaipin.search.server.service.GoodsService;
+import java.util.Collections;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,10 +76,17 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public int setGoodsCarousel(Carousel carousel) {
-        carousel.setCreateTime(System.currentTimeMillis());
-        carousel.setUpdateTime(System.currentTimeMillis());
-        return goodsMapper.insertCarouselGoods(carousel);
+    public int setGoodsCarousel(CarouselRequestDTO requestDTO) {
+        Carousel carouselGoods = goodsMapper.findCarouselGoods(requestDTO.getGoodsNumber());
+        if (ObjectUtils.isEmpty(carouselGoods)){
+            Carousel carousel = new Carousel();
+            BeanUtils.copyProperties(requestDTO, carousel);
+            carousel.setCarouselId(IdUtils.snowflakeId());
+            carousel.setCreateTime(System.currentTimeMillis());
+            carousel.setUpdateTime(System.currentTimeMillis());
+            return goodsMapper.insertCarouselGoods(carousel);
+        }
+        return -1;
     }
 
     @Override
@@ -84,9 +98,9 @@ public class GoodsServiceImpl implements GoodsService {
     public List<CarouselVO> carouselGoodsPanel() {
         List<Carousel> carousels = goodsMapper.getCarouselGoods();
         if (CollectionUtils.isEmpty(carousels)){
-            return null;
+            return Collections.emptyList();
         }
-        return carousels.stream().map(entityCreation::carouselConvertVO).collect(Collectors.toList());
+        return carousels.stream().map(obj -> entityCreation.carouselConvertVO(obj)).collect(Collectors.toList());
     }
 
 }

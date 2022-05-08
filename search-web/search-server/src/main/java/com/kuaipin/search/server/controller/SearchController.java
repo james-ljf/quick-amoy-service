@@ -31,7 +31,7 @@ public class SearchController {
     @Description(value = "获取商品推荐列表")
     @GetMapping(value = {"/panel/recommend"})
     public Response<Object> goodsRecommendPanel(@RequestParam(value = "uid", required = false) Long uId) {
-        return searchService.goodsRecommendPanel(null);
+        return searchService.goodsRecommendPanel(uId);
     }
 
     @Description(value = "搜索联想")
@@ -54,11 +54,9 @@ public class SearchController {
         // 获取分页请求值
         int pageNum = object.getInteger("pageNum");
         int pageSize = object.getInteger("pageSize");
-        long total = object.getLong("total");
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNum(pageNum);
         pageDTO.setPageSize(pageSize);
-        pageDTO.setTotalCount(total);
         if (ObjectUtils.isEmpty(pageDTO)){
             return Response.fail(Code.ERROR_PARAMS);
         }
@@ -77,11 +75,9 @@ public class SearchController {
         // 获取分页请求值
         int pageNum = object.getInteger("pageNum");
         int pageSize = object.getInteger("pageSize");
-        long total = object.getLong("total");
         PageDTO pageDTO = new PageDTO();
         pageDTO.setPageNum(pageNum);
         pageDTO.setPageSize(pageSize);
-        pageDTO.setTotalCount(total);
         if (ObjectUtils.isEmpty(pageDTO)){
             return Response.fail(Code.ERROR_PARAMS);
         }
