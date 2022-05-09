@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
         claimsMap.put("uid", uId);
         String userToken = JWTUtil.createToken(claimsMap, "1234".getBytes());
         // 将token存入缓存
-        RedisUtil.set(TOKEN_KEY + uId, userToken, 60*60*24);
+        RedisUtil.set(TOKEN_KEY + uId, userToken, 60*60*24L);
         UserLoginVO userLoginVO = new UserLoginVO();
         userLoginVO.setUId(uId);
         userLoginVO.setToken(userToken);

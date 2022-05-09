@@ -3,6 +3,7 @@ package com.kuaipin.user.api.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * @DateTime: 2022/5/7 19:26
  */
 @Data
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     /**
      * 用户id

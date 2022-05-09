@@ -1,6 +1,5 @@
 package com.kuaipin.admin.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.kuaipin.admin.service.SystemService;
 import com.kuaipin.common.annotation.ApiDescription;
 import com.kuaipin.common.constants.ErrorEnum;
@@ -94,7 +93,7 @@ public class SystemController {
         if (num < 1){
             return Response.fail(ErrorEnum.DATABASE_ERROR);
         }
-        return Response.success(SuccessEnum.OPERATION_SUCCESS);
+        return Response.success(Code.SUCCESS);
     }
 
     @ApiDescription(desc = "删除热推商品")
@@ -107,7 +106,7 @@ public class SystemController {
         if (num < 1){
             return Response.fail(ErrorEnum.DATABASE_ERROR);
         }
-        return Response.success(SuccessEnum.OPERATION_SUCCESS);
+        return Response.success(Code.SUCCESS);
     }
 
     @ApiDescription(desc = "获取热推商品列表")

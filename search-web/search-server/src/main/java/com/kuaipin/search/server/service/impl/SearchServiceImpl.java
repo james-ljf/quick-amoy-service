@@ -22,6 +22,7 @@ import com.kuaipin.search.server.util.analyzer.TFIDFAnalyzer;
 import com.kuaipin.user.api.entity.SearchRecordDTO;
 import com.kuaipin.user.api.service.RecordProcessService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.lucene.search.suggest.Lookup;
 import org.apache.lucene.search.suggest.analyzing.AnalyzingInfixSuggester;
@@ -61,10 +62,6 @@ public class SearchServiceImpl implements SearchService {
     private final CoverBottomComponent coverBottomComponent;
 
     private final PitPositionComponent pitPositionComponent;
-
-    @DubboReference
-    private RecordProcessService recordProcessService;
-
     @Autowired
     public SearchServiceImpl(RecommendComponent recommendComponent,
                              SearchComponent searchComponent,
@@ -75,6 +72,9 @@ public class SearchServiceImpl implements SearchService {
         this.coverBottomComponent = coverBottomComponent;
         this.pitPositionComponent = pitPositionComponent;
     }
+
+    @DubboReference
+    private RecordProcessService recordProcessService;
 
     private static final ThreadPoolExecutor execThreadPool = new ThreadPoolExecutor(40, 80,
             1L, TimeUnit.SECONDS,
@@ -96,6 +96,11 @@ public class SearchServiceImpl implements SearchService {
      * 判断在做搜索结果分页时不需要执行添加搜索记录
      */
     private static final String FIRST_SEARCH = "1";
+
+    /**
+     * 搜索发现的条件数量
+     */
+    private static final int DISCOVER_SIZE = 3;
 
     private static final Lock LOCK = new ReentrantLock();
 
@@ -225,7 +230,7 @@ public class SearchServiceImpl implements SearchService {
         // 若本次品类有结果
         if (CollectionUtils.isNotEmpty(goodsInfoVOList)) {
             // 获取当前页商品
-            Page<GoodsInfoVO> results = goodsInfoPage(goodsInfoVOList, pageDTO);
+            Page<GoodsInfoVO> results = setGoodsInfoPage(goodsInfoVOList, pageDTO);
             return Response.success(results);
         }
         return Response.success(goodsInfoVOList);
@@ -256,26 +261,27 @@ public class SearchServiceImpl implements SearchService {
             Thread.currentThread().interrupt();
             return Response.fail(Code.RESULT_NULL);
         }
-        List<GoodsInfoVO> goodsInfoVOList = new ArrayList<>();
+        List<GoodsInfoVO> goodsInfoVOList;
+        // 是否使用了分词的召回,true使用
+        boolean isEnough = CollectionUtils.isNotEmpty(analyzerList);
         if (CollectionUtils.isNotEmpty(goodsNameList) || CollectionUtils.isNotEmpty(sTypeNameList)){
             // 将结果放入map集合用于填坑位
             Map<String, Iterator<GoodsInfoVO>> listMap = new ConcurrentHashMap<>(6);
             listMap.put(SearchConstants.G_NAME, goodsNameList.iterator());
             listMap.put(SearchConstants.S_NAME, sTypeNameList.iterator());
             goodsInfoVOList = pitPositionComponent.searchPitFilling(listMap, analyzerList);
-        }else{
-            // 不填坑位
-            goodsInfoVOList.addAll(goodsNameList);
-            goodsInfoVOList.addAll(sTypeNameList);
-            goodsInfoVOList.addAll(analyzerList);
+        }else {
+            // 若召回无结果，不填坑
+            goodsInfoVOList = new ArrayList<>(analyzerList);
+            goodsInfoVOList = goodsInfoVOList.stream().distinct().collect(Collectors.toList());
         }
-        // 存放本次搜索是否有结果
+        // 本次搜索是否有结果
         boolean isResult = false;
         // 存放物理分页的最终结果
         Page<GoodsInfoVO> results = new Page<>();
         if (CollectionUtils.isNotEmpty(goodsInfoVOList)) {
             // 获取当前页商品
-            results = goodsInfoPage(goodsInfoVOList, pageDTO);
+            results = setGoodsInfoPage(goodsInfoVOList, pageDTO);
             isResult = true;
         }
         // 获取相关商家
@@ -288,24 +294,27 @@ public class SearchServiceImpl implements SearchService {
         if (FIRST_SEARCH.equals(type)){
             execThreadPool.execute(() -> setSearchRecord(uId, keyword, finalIsResult));
         }
-        return Response.success(results, businessVO);
+        // 结果扩展项
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("business", businessVO);
+        map.put("isEnough", isEnough);
+        return Response.success(results, map);
     }
 
     @Override
     public Response<Object> searchDiscovery(Long uid) {
-        int size = 3;
         // 获取用户搜索记录
-        List<SearchRecordDTO> searchRecordDTOList = recordProcessService.latelySearchHistory(uid, size);
+        List<SearchRecordDTO> searchRecordDTOList = recordProcessService.latelySearchHistory(uid, DISCOVER_SIZE);
         // 取出搜索记录的关键词并去重
-        List<String> keywords = searchRecordDTOList.stream().map(SearchRecordDTO::getSearchKeyword).collect(Collectors.toList());
-        keywords = keywords.stream().distinct().collect(Collectors.toList());
+        List<String> keywords = searchRecordDTOList.stream().distinct()
+                .map(SearchRecordDTO::getSearchKeyword).collect(Collectors.toList());
         // 创建搜索联想工具实例
         AnalyzingInfixSuggester suggester = SingletonSuggest.buildSuggester();
         // 存放搜索联想出来的推荐词文档
         List<Lookup.LookupResult> lookupResultList = new ArrayList<>();
         try {
             for (String keyword : keywords) {
-                lookupResultList.addAll(suggester.lookup(keyword, new HashSet<>(), size, true, true));
+                lookupResultList.addAll(suggester.lookup(keyword, new HashSet<>(), DISCOVER_SIZE, true, true));
             }
         } catch (IOException e) {
             log.error("[4013.searchDiscovery error] : {}", ErrorEnum.SEARCH_ERROR.getMsg());
@@ -315,7 +324,17 @@ public class SearchServiceImpl implements SearchService {
             // 推荐词分词处理
             results = analyzerKeyList(lookupResultList);
         }
+        results = results.stream().distinct().collect(Collectors.toList());
         return Response.success(results);
+    }
+
+    @Override
+    public Response<Object> searchGoods(String goodsNumber) {
+        GoodsInfoVO resultVO = searchComponent.getGoodsInfoByNumber(goodsNumber);
+        if (ObjectUtils.isEmpty(resultVO)){
+            return Response.fail(Code.RESULT_NULL);
+        }
+        return Response.success(resultVO);
     }
 
     /**
@@ -432,7 +451,7 @@ public class SearchServiceImpl implements SearchService {
      * @param pageDTO         分页实体
      * @return 当前页数据
      */
-    public Page<GoodsInfoVO> goodsInfoPage(List<GoodsInfoVO> goodsInfoVOList, PageDTO pageDTO) {
+    public Page<GoodsInfoVO> setGoodsInfoPage(List<GoodsInfoVO> goodsInfoVOList, PageDTO pageDTO) {
         // 进行分页
         int pageNum = pageDTO.getPageNum();
         int pageSize = pageDTO.getPageSize();
@@ -480,7 +499,9 @@ public class SearchServiceImpl implements SearchService {
         }finally {
             LOCK.unlock();
         }
-        log.info("插入了{}条搜索记录,req = {}", num, searchRecordDTO);
+        if (num != 0){
+            log.info("插入了{}条搜索记录,req = {}", num, searchRecordDTO);
+        }
     }
 
     /**

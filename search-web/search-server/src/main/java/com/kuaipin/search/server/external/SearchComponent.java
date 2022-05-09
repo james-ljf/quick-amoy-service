@@ -8,6 +8,7 @@ import com.kuaipin.search.server.convert.EntityCreation;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.util.BoolQueryBuilders;
 import com.kuaipin.search.server.util.LuceneUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
@@ -46,7 +47,7 @@ public class SearchComponent {
         IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         String key = IndexConstants.GOODS_NAME;
         // 商品名搜索
-        Query query = new FuzzyQuery(new Term(key, keyword), 1);
+        Query query = new FuzzyQuery(new Term(key, keyword), 0);
         // 评论数降序
         Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false));
         try{
@@ -87,8 +88,8 @@ public class SearchComponent {
         IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 构造搜索条件
         BoolQueryBuilders builders = new BoolQueryBuilders();
-        builders.should(new TermQuery(new Term(IndexConstants.S_TYPE_NAME, keyword)));
-        builders.should(new TermQuery(new Term(IndexConstants.GOODS_BRAND, keyword)));
+        builders.should(new FuzzyQuery(new Term(IndexConstants.S_TYPE_NAME, keyword), 1));
+        builders.should(new FuzzyQuery(new Term(IndexConstants.GOODS_BRAND, keyword), 1));
         Query query = builders.build();
         try{
             TopDocs topDocs = searcher.search(query, SearchConstants.SEARCH_SIZE);
@@ -113,7 +114,7 @@ public class SearchComponent {
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (String word : keywords) {
             // 将分词后的关键词加入should条件
-            builders.should(new TermQuery(new Term(key, word)));
+            builders.should(new FuzzyQuery(new Term(key, word), 2));
         }
         Query query = builders.build();
         // 评论数降序
@@ -164,6 +165,22 @@ public class SearchComponent {
         return new ArrayList<>();
     }
 
-
+    /**
+     * 搜索商品信息
+     * @param goodsNumber  商品编号
+     * @return  商品信息
+     */
+    public GoodsInfoVO getGoodsInfoByNumber(String goodsNumber){
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
+        Query query = new TermQuery(new Term(IndexConstants.GOODS_NUMBER, goodsNumber));
+        try{
+            TopDocs topDocs = searcher.search(query, 1);
+            ScoreDoc[] scoreDoc = topDocs.scoreDocs;
+            return entityCreation.objConvertVO(scoreDoc[0], searcher);
+        }catch (IOException | ParseException e){
+            log.error("[4206.getGoodsInfoByNumber error] : {}, msg = {}", ErrorEnum.SEARCH_ERROR.getMsg(), e.getMessage());
+        }
+        return null;
+    }
 
 }

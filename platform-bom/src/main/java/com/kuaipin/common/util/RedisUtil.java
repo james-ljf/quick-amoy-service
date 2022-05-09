@@ -257,8 +257,8 @@ public final class RedisUtil implements ApplicationContextAware {
         try {
             if (time > 0) {
                 redisTemplate.opsForValue().set(key, value, time, unit);
-            } else {
-                set(key, value);
+            }else {
+                redisTemplate.opsForValue().set(key, value);
             }
 
         } catch (Exception e) {

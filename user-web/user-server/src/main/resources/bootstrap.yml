@@ -36,6 +36,7 @@ dubbo:
     name: dubbo
     port: 20900
   application:
+    name: user-web
     qos-enable: false
   registry:
     address: nacos://127.0.0.1:8848

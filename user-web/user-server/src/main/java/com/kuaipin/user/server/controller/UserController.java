@@ -60,7 +60,7 @@ public class UserController {
         }
         UserLoginVO userLoginVO = userService.setUserLogin(userRequest);
         if (ObjectUtils.isEmpty(userLoginVO)){
-            return Response.fail(Code.RESULT_NULL);
+            return Response.fail(ErrorEnum.PWD_ERROR);
         }
         return Response.success(userLoginVO);
     }

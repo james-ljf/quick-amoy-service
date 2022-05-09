@@ -41,8 +41,8 @@ spring:
           predicates:
             - Path=/using/**
         # 管理员服务
-        - id: admin-web
-          uri: lb://admin-web
+        - id: admin-server
+          uri: lb://admin-server
           predicates:
             - Path=/admin/**
 

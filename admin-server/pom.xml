@@ -9,15 +9,28 @@
         <version>1.0.0</version>
     </parent>
 
-    <description>后台管理服务</description>
-    <artifactId>admin-web</artifactId>
-    <packaging>pom</packaging>
+
+    <artifactId>admin-server</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.kuaipin</groupId>
             <artifactId>platform-bom</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.huaban</groupId>
+                    <artifactId>jieba-analysis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.lionsoul</groupId>
+                    <artifactId>jcseg-analyzer</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.lionsoul</groupId>
+                    <artifactId>jcseg-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.kuaipin</groupId>
