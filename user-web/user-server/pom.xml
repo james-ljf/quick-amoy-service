@@ -14,11 +14,6 @@
    <dependencies>
        <dependency>
            <groupId>com.kuaipin</groupId>
-           <artifactId>platform-bom</artifactId>
-           <version>1.0.0</version>
-       </dependency>
-       <dependency>
-           <groupId>com.kuaipin</groupId>
            <artifactId>user-api</artifactId>
            <version>1.0.0</version>
        </dependency>

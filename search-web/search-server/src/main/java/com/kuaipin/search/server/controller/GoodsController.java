@@ -44,47 +44,12 @@ public class GoodsController {
         return Response.success(categoryVOList);
     }
 
-//    @ApiDescription(desc = "获取所有商品")
-//    @PostMapping(value = {"/goods/panel"})
-//    public Response<Object> goodsPanel(@RequestBody PageDTO pageDTO){
-//        if (ObjectUtils.isEmpty(pageDTO)){
-//            return Response.fail(Code.ERROR_PARAMS);
-//        }
-//        Page<GoodsInfoVO> result = goodsService.getGoodsPanel(pageDTO);
-//        return Response.success(result);
-//    }
-//
-//    @ApiDescription(desc = "设置热推商品")
-//    @PostMapping(value = {"/goods/hot"})
-//    public Response<Object> setHotGoods(@RequestBody CarouselRequestDTO requestDTO){
-//        if (ObjectUtils.isEmpty(requestDTO)){
-//            return Response.fail(Code.ERROR_PARAMS);
-//        }
-//        int num = goodsService.setGoodsCarousel(requestDTO);
-//        if (num < 1){
-//            return Response.fail(ErrorEnum.DATABASE_ERROR);
-//        }
-//        return Response.success(SuccessEnum.OPERATION_SUCCESS);
-//    }
-//
-//    @ApiDescription(desc = "删除热推商品")
-//    @GetMapping(value = {"/del/goods/hot"})
-//    public Response<Object> delHotGoods(@RequestParam("carousel_id") Long carouselId){
-//        if (ObjectUtils.isEmpty(carouselId)){
-//            return Response.fail(Code.ERROR_PARAMS);
-//        }
-//        int num = goodsService.cancelGoodsCarousel(carouselId);
-//        if (num < 1){
-//            return Response.fail(ErrorEnum.DATABASE_ERROR);
-//        }
-//        return Response.success(SuccessEnum.OPERATION_SUCCESS);
-//    }
-//
-//    @ApiDescription(desc = "获取热推商品列表")
-//    @GetMapping(value = {"/goods/hot"})
-//    public Response<Object> hotGoodsPanel(){
-//        List<CarouselVO> results = goodsService.carouselGoodsPanel();
-//        return Response.success(results);
-//    }
+
+    @ApiDescription(desc = "获取热推商品列表")
+    @GetMapping(value = {"/goods/hot"})
+    public Response<Object> hotGoodsPanel(){
+        List<CarouselVO> results = goodsService.carouselGoodsPanel();
+        return Response.success(results);
+    }
 
 }

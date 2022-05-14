@@ -1,5 +1,6 @@
 package com.kuaipin.admin.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.jwt.JWTUtil;
 import com.kuaipin.admin.entity.Admin;
 import com.kuaipin.admin.entity.request.AdminRequest;
@@ -39,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
         if (ObjectUtils.isEmpty(admin)){
             return null;
         }
-        if (!admin.getAdminPwd().equals(request.getAdminPwd())){
+        if (!admin.getAdminPwd().equals(SecureUtil.md5().digestHex16(request.getAdminPwd()))){
             return null;
         }
         // 密码正确登录成功，生成token，将用户id存到载荷中

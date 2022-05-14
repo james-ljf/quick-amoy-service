@@ -3,6 +3,7 @@ package com.kuaipin.user.api.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.StringJoiner;
 
@@ -12,7 +13,7 @@ import java.util.StringJoiner;
  * @DateTime: 2022/4/2 20:43
  */
 @Data
-public class BrowseRecordDTO {
+public class BrowseRecordDTO implements Serializable {
 
     /**
      * 浏览记录id

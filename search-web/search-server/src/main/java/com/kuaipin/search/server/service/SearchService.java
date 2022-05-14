@@ -52,4 +52,11 @@ public interface SearchService {
      */
     Response<Object> searchDiscovery(Long uid);
 
+    /**
+     * 搜索商品信息
+     * @param goodsNumber  商品编号
+     * @return  商品信息
+     */
+    Response<Object> searchGoods(String goodsNumber);
+
 }

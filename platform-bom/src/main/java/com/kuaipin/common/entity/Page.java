@@ -2,6 +2,7 @@ package com.kuaipin.common.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @DateTime: 2021/12/13 14:53
  */
 @Data
-public class Page<T>{
+public class Page<T> implements Serializable {
 
     /** 总记录数 */
     private Long totalCount;

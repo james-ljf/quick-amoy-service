@@ -1,6 +1,7 @@
 package com.kuaipin.user.server;
 
 import com.kuaipin.common.annotation.StarterApplication;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @DateTime: 2022/3/22 14:20
  */
 @StarterApplication
+@EnableDubbo
 @EnableDiscoveryClient
 @MapperScan(value = {"com.kuaipin.user.server.repository.impl.mapper"})
 public class UserApplication {

@@ -1,6 +1,7 @@
 package com.kuaipin.search.server.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.kuaipin.common.annotation.ApiDescription;
 import com.kuaipin.common.annotation.Description;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
@@ -28,13 +29,13 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-    @Description(value = "获取商品推荐列表")
+    @ApiDescription(desc = "获取商品推荐列表")
     @GetMapping(value = {"/panel/recommend"})
     public Response<Object> goodsRecommendPanel(@RequestParam(value = "uid", required = false) Long uId) {
         return searchService.goodsRecommendPanel(uId);
     }
 
-    @Description(value = "搜索联想")
+    @ApiDescription(desc = "搜索联想")
     @PostMapping(value = {"/panel/affix"})
     public Response<Object> searchAssociationList(@RequestBody JSONObject object){
         String keyword = object.getString("keyword");
@@ -44,7 +45,7 @@ public class SearchController {
         return searchService.searchAssociation(keyword);
     }
 
-    @Description(value = "按照商品小品类筛选搜索")
+    @ApiDescription(desc = "按照商品小品类筛选搜索")
     @PostMapping(value = {"/goods/category"})
     public Response<Object> categoryGoodsPanel(@RequestBody JSONObject object){
         String typeName = object.getString("typeName");
@@ -63,7 +64,7 @@ public class SearchController {
         return searchService.searchCategoryPanel(typeName, pageDTO);
     }
 
-    @Description(value = "关键词搜索商品")
+    @ApiDescription(desc = "关键词搜索商品")
     @PostMapping(value = {"/goods/keyword"})
     public Response<Object> hasKeywordGoodsPanel(@RequestBody JSONObject object){
         String keyword = object.getString("typeName");
@@ -84,10 +85,19 @@ public class SearchController {
         return searchService.searchKeywordPanel(keyword, uId, pageDTO, type);
     }
 
-    @Description(value = "搜索发现")
-    @GetMapping(value = {"/keyword/list"})
-    public Response<Object> discoveryPanel(@RequestParam(value = "uid", required = false) Long uid){
+    @ApiDescription(desc = "搜索发现")
+    @GetMapping(value = {"/rel/keyword/discovery"})
+    public Response<Object> discoveryPanel(@RequestParam(value = "uid") Long uid){
         return searchService.searchDiscovery(uid);
+    }
+
+    @ApiDescription(desc = "搜索某商品")
+    @GetMapping(value = {"/rel/goods"})
+    public Response<Object> hasGoodsInfo(@RequestParam("goodsNumber") String goodsNumber){
+        if (StringUtils.isBlank(goodsNumber)){
+            return Response.fail(Code.ERROR_PARAMS);
+        }
+        return searchService.searchGoods(goodsNumber);
     }
 
 }

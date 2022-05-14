@@ -1,8 +1,6 @@
 package com.kuaipin.common.annotation;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.lang.annotation.*;
@@ -15,7 +13,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @SpringBootApplication
-@EnableDiscoveryClient
 @ComponentScan(value = "com.kuaipin")
 public @interface StarterApplication {
 }

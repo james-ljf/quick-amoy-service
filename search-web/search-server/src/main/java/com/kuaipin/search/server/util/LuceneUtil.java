@@ -116,7 +116,7 @@ public class LuceneUtil {
         SegmenterConfig segmenterConfig = new SegmenterConfig(true);
         ADictionary aDictionary = DictionaryFactory.createDefaultDictionary(segmenterConfig);
         try {
-            IndexWriterConfig config = new IndexWriterConfig(new JcsegAnalyzer(ISegment.Type.SIMPLE, segmenterConfig, aDictionary));
+            IndexWriterConfig config = new IndexWriterConfig(new JcsegAnalyzer(ISegment.Type.NLP, segmenterConfig, aDictionary));
             // 设置索引打开方式
             config.setOpenMode(OpenMode.CREATE_OR_APPEND);
             // 设置关闭之前先提交

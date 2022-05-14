@@ -60,6 +60,28 @@ public class EntityCreation {
         return goodsInfoVOList;
     }
 
+    public GoodsInfoVO objConvertVO(ScoreDoc scoreDoc, IndexSearcher searcher) throws ParseException, IOException {
+        Document document = searcher.doc(scoreDoc.doc);
+        // 创建商品信息类，从索引构建实体并返回
+        GoodsInfoVO goodsInfoVO = new GoodsInfoVO();
+        goodsInfoVO.setGoodsId(document.get(IndexConstants.GOODS_ID));
+        goodsInfoVO.setGoodsNumber(Long.parseLong(document.get(IndexConstants.GOODS_NUMBER)));
+        goodsInfoVO.setGoodsName(document.get(IndexConstants.GOODS_NAME));
+        goodsInfoVO.setGoodsBrand(document.get(IndexConstants.GOODS_BRAND));
+        goodsInfoVO.setGoodsPic(document.get(IndexConstants.GOODS_PIC));
+        goodsInfoVO.setGoodsEdition(document.get(IndexConstants.GOODS_EDITION));
+        goodsInfoVO.setGoodsPrice(document.get(IndexConstants.GOODS_PRICE));
+        goodsInfoVO.setGoodsComment(Integer.parseInt(document.get(IndexConstants.GOODS_COMMENT)));
+        goodsInfoVO.setBusinessId(Long.parseLong(document.get(IndexConstants.BUSINESS_ID)));
+        goodsInfoVO.setBusinessName(document.get(IndexConstants.BUSINESS_NAME));
+        goodsInfoVO.setIsFlagship(document.get(IndexConstants.IS_FLAGSHIP));
+        goodsInfoVO.setSTypeId(Long.parseLong(document.get(IndexConstants.S_TYPE_ID)));
+        goodsInfoVO.setSTypeName(document.get(IndexConstants.S_TYPE_NAME));
+        goodsInfoVO.setTypeName(document.get(IndexConstants.TYPE_NAME));
+        goodsInfoVO.setCreateTime(DateTools.stringToDate(document.get(IndexConstants.CREATE_TIME)));
+        return goodsInfoVO;
+    }
+
     /**
      * 在结果中高亮显示关键词
      * @param topDocs   搜索结果文档
