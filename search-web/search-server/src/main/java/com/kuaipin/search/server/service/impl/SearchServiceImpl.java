@@ -351,8 +351,7 @@ public class SearchServiceImpl implements SearchService {
         for (Lookup.LookupResult result : lookupResultList) {
             String key = (String) result.key;
             // 以空格分割成字符数组
-            String[] highKeyArray = key.split(" ");
-
+            String[] highKeyArray = key.trim().split("\\s+");
             // 如果数组长度大于1，那么该推荐词是商品名,通过分词算法拿到分值高的关键词
             if (highKeyArray.length > 1) {
                 TFIDFAnalyzer analyzer = new TFIDFAnalyzer();
@@ -422,7 +421,7 @@ public class SearchServiceImpl implements SearchService {
         for (Lookup.LookupResult result : lookupResultList) {
             String highKey = (String) result.highlightKey;
             // 以空格分割成字符数组
-            String[] highKeyArray = highKey.split(" ");
+            String[] highKeyArray = highKey.trim().split("\\s+");
             // 如果数组长度大于1，那么该推荐词是商品名，则只取含有高亮标签<b>的那一个下标的词段
             if (highKeyArray.length > 1) {
                 String key = null;
@@ -430,16 +429,18 @@ public class SearchServiceImpl implements SearchService {
                     Matcher matcher = PATTERN.matcher(highStr);
                     if (matcher.find()) {
                         key = highStr;
-                        key = key.replace("<b>", "");
-                        key = key.replace("</b>", "");
+                        key = key.replace("<b>", "<span style='color:red;'>");
+                        key = key.replace("</b>", "</span>");
                         break;
                     }
                 }
                 results.add(key);
                 continue;
             }
+            highKey = highKey.replace("<b>", "<span style='color:red;'>");
+            highKey = highKey.replace("</b>", "</span>");
             // 获取高亮的key
-            results.add((String) result.key);
+            results.add(highKey);
         }
         return results;
     }
@@ -488,6 +489,7 @@ public class SearchServiceImpl implements SearchService {
         searchRecordDTO.setUId(uId);
         searchRecordDTO.setIsResult(SearchConstants.NOT_RESULT);
         if (isResult) {
+            // 本次搜索有结果
             searchRecordDTO.setIsResult(SearchConstants.HAS_RESULT);
         }
         int num;
@@ -512,9 +514,11 @@ public class SearchServiceImpl implements SearchService {
      */
     public void pushResultToList(List<GoodsInfoVO> list) {
         long time = SearchConstants.TIMER;
+        String key = SearchConstants.RECOMMEND_KEY;
         for (GoodsInfoVO goodsInfoVO : list) {
-            RedisUtil.setList(SearchConstants.RECOMMEND_KEY, goodsInfoVO, time);
+            RedisUtil.setList(key, goodsInfoVO, time);
         }
+        RedisUtil.trim(key, 30, -1);
     }
 
     /**
@@ -525,9 +529,11 @@ public class SearchServiceImpl implements SearchService {
      */
     public void pushLoginResultToList(List<GoodsInfoVO> list) {
         long time = SearchConstants.TIMER;
+        String key = SearchConstants.LOGIN_RECOMMEND_KEY;
         for (GoodsInfoVO goodsInfoVO : list) {
-            RedisUtil.setList(SearchConstants.LOGIN_RECOMMEND_KEY, goodsInfoVO, time);
+            RedisUtil.setList(key, goodsInfoVO, time);
         }
+        RedisUtil.trim(key, 30, -1);
     }
 
 }

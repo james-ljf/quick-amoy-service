@@ -140,7 +140,7 @@ public class RecordServiceImpl implements RecordService {
             num = recordRepository.setBrowseRecord(browseRecord);
         }else{
             // 有记录则更新update_time字段
-            uRecord.setCreateTime(new Date());
+            uRecord.setUpdateTime(new Date());
             num = recordRepository.modifyBrowseRecord(uRecord);
         }
         return num;

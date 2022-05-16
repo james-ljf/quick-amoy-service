@@ -52,8 +52,7 @@ public class RecommendComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> flagShipGoods(List<GoodsInfoVO> notExistList){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 条件:旗舰店的商家
         BoolQueryBuilders builders = new BoolQueryBuilders();
         builders.must(new TermQuery(new Term(IndexConstants.IS_FLAGSHIP, SearchConstants.IS_FLAGSHIP)));
@@ -93,8 +92,7 @@ public class RecommendComponent {
             return new ArrayList<>();
         }
         // 如果有搜索记录，则获取搜索记录的关键词去召回
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         BoolQueryBuilders builders = new BoolQueryBuilders();
         // 将搜索记录的关键词添加到搜索条件中(“或”条件)
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
@@ -130,8 +128,7 @@ public class RecommendComponent {
      * @return  商品列表
      */
     public List<GoodsInfoVO> newTrendGoods(List<GoodsInfoVO> notExistList){
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 召回条件存储
         BoolQueryBuilders builders = new BoolQueryBuilders();
         // 获取关键词数组
@@ -169,8 +166,7 @@ public class RecommendComponent {
         if (CollectionUtils.isEmpty(searchHistoryDTOList)){
             return new ArrayList<>();
         }
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (SearchRecordDTO searchRecordDTO : searchHistoryDTOList) {
             // 添加条件
@@ -209,8 +205,7 @@ public class RecommendComponent {
         }
         // 获取浏览记录的商品所属小品类id并去重
         Set<Long> sTypeIdList = browseRecordDTOList.stream().map(BrowseRecordDTO::getSTypeId).collect(Collectors.toSet());
-        IndexReader reader = LuceneUtil.buildIndexReader();
-        IndexSearcher searcher = LuceneUtil.buildIndexSearcher(reader);
+        IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (Long sTypeId : sTypeIdList) {
             builders.should(new TermQuery(new Term(IndexConstants.S_TYPE_ID, String.valueOf(sTypeId))));

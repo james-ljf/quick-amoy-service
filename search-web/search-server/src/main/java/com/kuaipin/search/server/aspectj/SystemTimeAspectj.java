@@ -28,7 +28,6 @@ public class SystemTimeAspectj {
         // TODO
     }
 
-
     @Around("currentTimeLog()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         //开始时间

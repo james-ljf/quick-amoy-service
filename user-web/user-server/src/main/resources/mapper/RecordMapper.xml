@@ -99,21 +99,21 @@
     <update id="updateBroseRecord">
         UPDATE browse_record
         SET update_time = #{br.updateTime}
-        WHERE browse_id = #{bid} AND u_id = #{uid} AND is_delete = 0
+        WHERE browse_id = #{br.browseId} AND u_id = #{br.uId} AND is_delete = 0
     </update>
 
     <select id="selectNearBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
         SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
         FROM browse_record
         WHERE u_id = #{uid} AND is_delete = 0
-        AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &lt;= update_time
+        AND DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= update_time
     </select>
 
     <select id="selectLaterBrowseRecord" resultType="com.kuaipin.user.server.entity.po.BrowseRecord">
         SELECT browse_id, goods_number, goods_name, goods_pic, s_type_id, u_id, create_time, update_time
         FROM browse_record
         WHERE u_id = #{uid} AND is_delete = 0
-        AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) &gt;= update_time
+        AND DATE_SUB(CURDATE(), INTERVAL 3 DAY) &gt;= update_time
     </select>
 
 </mapper>

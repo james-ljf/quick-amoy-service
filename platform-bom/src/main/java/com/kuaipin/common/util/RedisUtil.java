@@ -484,6 +484,20 @@ public final class RedisUtil implements ApplicationContextAware {
         }
     }
 
+    /**
+     * 裁剪元素，保留start~end的元素
+     * @param key  键
+     * @param start  起始
+     * @param end  结尾
+     */
+    public static void trim(String key, Integer start, Integer end){
+        try{
+            redisTemplate.opsForList().trim(key, start, end);
+        }catch (Exception e){
+            logger.error("[leftPop] occur error : ", e);
+        }
+    }
+
     // ============================ function =============================
 
     /**

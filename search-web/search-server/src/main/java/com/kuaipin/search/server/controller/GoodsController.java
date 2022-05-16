@@ -1,20 +1,12 @@
 package com.kuaipin.search.server.controller;
 
 import com.kuaipin.common.annotation.ApiDescription;
-import com.kuaipin.common.constants.ErrorEnum;
-import com.kuaipin.common.constants.SuccessEnum;
-import com.kuaipin.common.entity.Page;
 import com.kuaipin.common.entity.Response;
 import com.kuaipin.common.entity.dto.Code;
-import com.kuaipin.common.entity.dto.PageDTO;
-import com.kuaipin.search.api.entity.dto.CarouselRequestDTO;
-import com.kuaipin.search.server.entity.po.Carousel;
 import com.kuaipin.search.server.entity.response.CarouselVO;
 import com.kuaipin.search.server.entity.response.GoodsCategoryVO;
-import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.service.GoodsService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

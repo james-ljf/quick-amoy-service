@@ -8,10 +8,16 @@ import com.kuaipin.search.server.convert.EntityCreation;
 import com.kuaipin.search.server.entity.response.GoodsInfoVO;
 import com.kuaipin.search.server.util.BoolQueryBuilders;
 import com.kuaipin.search.server.util.LuceneUtil;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.lionsoul.jcseg.ISegment;
+import org.lionsoul.jcseg.analyzer.JcsegAnalyzer;
+import org.lionsoul.jcseg.dic.ADictionary;
+import org.lionsoul.jcseg.dic.DictionaryFactory;
+import org.lionsoul.jcseg.segmenter.SegmenterConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,29 +51,35 @@ public class SearchComponent {
      */
     public List<GoodsInfoVO> goodsNameRecall(String keyword){
         IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
+        // 创建分词器
+        SegmenterConfig segmenterConfig = new SegmenterConfig(true);
+        ADictionary aDictionary = DictionaryFactory.createDefaultDictionary(segmenterConfig);
+        Analyzer analyzer = new JcsegAnalyzer(ISegment.Type.NLP, segmenterConfig, aDictionary);
         String key = IndexConstants.GOODS_NAME;
-        // 商品名搜索
-        Query query = new FuzzyQuery(new Term(key, keyword), 0);
+        // 构建查询器
+        QueryParser queryParser = new QueryParser(key, analyzer);
         // 评论数降序
         Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false));
         try{
+            Query query = queryParser.parse(keyword);
             TopDocs topDocs = searcher.search(query, SearchConstants.SEARCH_SIZE, sort);
             return entityCreation.docConvertVoHigh(topDocs, searcher,  key, keyword);
-        }catch (IOException | ParseException | InvalidTokenOffsetsException e){
+        }catch (IOException | InvalidTokenOffsetsException | ParseException |
+                org.apache.lucene.queryparser.classic.ParseException e){
             log.error("[4201.productNameRecall error] : {}, msg = {}", ErrorEnum.SEARCH_ERROR.getMsg(), e.getMessage());
         }
         return new ArrayList<>();
     }
 
     /**
-     * 根据关键词模糊搜索商家名称
+     * 根据关键词搜索商家名称
      * @param keyword   关键词
      * @return  商品列表
      */
     public List<GoodsInfoVO> businessNameRecall(String keyword){
         IndexSearcher searcher = LuceneUtil.buildIndexSearcher();
         // 商家名称模糊搜索
-        Query query = new TermQuery(new Term(IndexConstants.BUSINESS_NAME, keyword));
+        Query query = new FuzzyQuery(new Term(IndexConstants.BUSINESS_NAME, keyword), 1);
         // 评论数降序
         Sort sort = new Sort(new SortField(IndexConstants.GOODS_COMMENT, SortField.Type.INT, false));
         try{
@@ -114,7 +126,7 @@ public class SearchComponent {
         BoolQueryBuilders builders = new BoolQueryBuilders();
         for (String word : keywords) {
             // 将分词后的关键词加入should条件
-            builders.should(new FuzzyQuery(new Term(key, word), 2));
+            builders.should(new FuzzyQuery(new Term(key, word), 1));
         }
         Query query = builders.build();
         // 评论数降序
